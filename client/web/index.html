@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Conversion Client</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-exchange-alt"></i>
+                <h1>Currency Conversion Client</h1>
+            </div>
+            <div class="status" id="status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Checking connection...</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Service Health Section -->
+            <section class="card">
+                <h2><i class="fas fa-heartbeat"></i> Service Health</h2>
+                <div class="health-check">
+                    <button onclick="checkHealth()" class="btn btn-secondary" id="healthBtn">
+                        <i class="fas fa-sync"></i> Check Health
+                    </button>
+                    <div class="health-result" id="healthResult"></div>
+                </div>
+            </section>
+
+            <!-- Currency Conversion Section -->
+            <section class="card">
+                <h2><i class="fas fa-coins"></i> Currency Conversion</h2>
+                <form class="conversion-form" onsubmit="convertCurrency(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" id="amount" step="0.01" min="0" placeholder="100.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fromCurrency">From</label>
+                            <select id="fromCurrency" required>
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="JPY">JPY - Japanese Yen</option>
+                                <option value="CAD">CAD - Canadian Dollar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="toCurrency">To</label>
+                            <select id="toCurrency" required>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="JPY">JPY - Japanese Yen</option>
+                                <option value="CAD">CAD - Canadian Dollar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="convertBtn">
+                        <i class="fas fa-exchange-alt"></i> Convert Currency
+                    </button>
+                </form>
+                <div class="conversion-result" id="conversionResult"></div>
+            </section>
+
+            <!-- Service Summary Section -->
+            <section class="card">
+                <h2><i class="fas fa-info-circle"></i> Service Summary</h2>
+                <button onclick="getSummary()" class="btn btn-secondary" id="summaryBtn">
+                    <i class="fas fa-list"></i> Get Summary
+                </button>
+                <div class="summary-result" id="summaryResult"></div>
+            </section>
+
+            <!-- Test All Operations -->
+            <section class="card">
+                <h2><i class="fas fa-flask"></i> Test All Operations</h2>
+                <button onclick="testAllOperations()" class="btn btn-accent" id="testAllBtn">
+                    <i class="fas fa-play"></i> Run All Tests
+                </button>
+                <div class="test-results" id="testResults"></div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Currency Conversion Client - Connected to Web Service</p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Processing request...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

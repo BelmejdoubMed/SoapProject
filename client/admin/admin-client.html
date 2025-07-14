@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency Conversion - Admin Client</title>
+</head>
+<body>
+    <h1>Currency Conversion Service</h1>
+    <h2>Admin Client</h2>
+    
+    <h3>Service Status</h3>
+    <button onclick="checkHealth()">Check Service Health</button>
+    <div id="healthResult"></div>
+    
+    <h3>View All Exchange Rates</h3>
+    <button onclick="getAllRates()">Get All Rates</button>
+    <div id="ratesResult"></div>
+    
+    <h3>Update Exchange Rate</h3>
+    <form id="updateRateForm">
+        <label for="updateCurrency">Currency:</label>
+        <input type="text" id="updateCurrency" placeholder="e.g., EUR" maxlength="3" required>
+        <br><br>
+        
+        <label for="updateRate">New Rate (to USD):</label>
+        <input type="number" id="updateRate" step="0.0001" min="0.0001" required>
+        <br><br>
+        
+        <button type="submit">Update Rate</button>
+    </form>
+    <div id="updateResult"></div>
+    
+    <h3>Add New Currency</h3>
+    <form id="addCurrencyForm">
+        <label for="newCurrency">Currency Code:</label>
+        <input type="text" id="newCurrency" placeholder="e.g., AUD" maxlength="3" required>
+        <br><br>
+        
+        <label for="newRate">Exchange Rate (to USD):</label>
+        <input type="number" id="newRate" step="0.0001" min="0.0001" required>
+        <br><br>
+        
+        <button type="submit">Add Currency</button>
+    </form>
+    <div id="addResult"></div>
+    
+    <h3>Remove Currency</h3>
+    <form id="removeCurrencyForm">
+        <label for="removeCurrency">Currency Code:</label>
+        <input type="text" id="removeCurrency" placeholder="e.g., JPY" maxlength="3" required>
+        <br><br>
+        
+        <button type="submit">Remove Currency</button>
+    </form>
+    <div id="removeResult"></div>
+    
+    <h3>Supported Currencies</h3>
+    <button onclick="getSupportedCurrencies()">Get Supported Currencies</button>
+    <div id="currenciesResult"></div>
+
+    <script>
+        const SERVICE_URL = 'http://localhost:8000/CurrencyConversionService/services/CurrencyConverter';
+        
+        function createSOAPEnvelope(method, params) {
+            return `<?xml version="1.0" encoding="UTF-8"?>
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+                               xmlns:ns="http://service.currency.com">
+                    <soap:Header/>
+                    <soap:Body>
+                        <ns:${method}>
+                            ${params}
+                        </ns:${method}>
+                    </soap:Body>
+                </soap:Envelope>`;
+        }
+        
+        function sendSOAPRequest(soapBody, soapAction, callback) {
+            console.log('Sending SOAP request:', soapBody);
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', SERVICE_URL, true);
+            xhr.setRequestHeader('Content-Type', 'text/xml; charset=utf-8');
+            xhr.setRequestHeader('SOAPAction', soapAction);
+            
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log('Response status:', xhr.status);
+                    console.log('Response text:', xhr.responseText);
+                    
+                    if (xhr.status === 200) {
+                        callback(null, xhr.responseText);
+                    } else {
+                        callback(new Error('Request failed: ' + xhr.status + ' - ' + xhr.statusText), null);
+                    }
+                }
+            };
+            
+            xhr.onerror = function() {
+                console.error('XMLHttpRequest error occurred');
+                callback(new Error('Network error occurred'), null);
+            };
+            
+            xhr.send(soapBody);
+        }
+        
+        function parseSOAPResponse(response) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(response, 'text/xml');
+            
+            // Log the full response for debugging
+            console.log('Parsing SOAP response:', response);
+            
+            // Try different possible return element names and namespaces
+            let returnElement = xmlDoc.getElementsByTagName('ns:return')[0] || 
+                               xmlDoc.getElementsByTagName('return')[0] ||
+                               xmlDoc.querySelector('return') ||
+                               xmlDoc.querySelector('[localName="return"]');
+            
+            // If still not found, try more specific searches
+            if (!returnElement) {
+                const allElements = xmlDoc.getElementsByTagName('*');
+                for (let i = 0; i < allElements.length; i++) {
+                    if (allElements[i].localName === 'return' || allElements[i].tagName.endsWith(':return')) {
+                        returnElement = allElements[i];
+                        break;
+                    }
+                }
+            }
+            
+            if (returnElement) {
+                const result = returnElement.textContent.trim();
+                console.log('Extracted result:', result);
+                return result;
+            } else {
+                console.error('Could not find return element in response');
+                return null;
+            }
+        }
+        
+        function refreshAllData() {
+            console.log('Refreshing all data...');
+            getAllRates();
+            getSupportedCurrencies();
+        }
+        
+        function checkHealth() {
+            const soapBody = createSOAPEnvelope('isServiceHealthy', '');
+            
+            sendSOAPRequest(soapBody, 'urn:isServiceHealthy', function(error, response) {
+                const resultDiv = document.getElementById('healthResult');
+                if (error) {
+                    resultDiv.innerHTML = '<p>Error: ' + error.message + '</p>';
+                } else {
+                    const healthy = response.includes('true');
+                    resultDiv.innerHTML = '<p>Service is ' + (healthy ? 'healthy' : 'not healthy') + '</p>';
+                }
+            });
+        }
+        
+        function getAllRates() {
+            const soapBody = createSOAPEnvelope('getAllRates', '');
+            
+            sendSOAPRequest(soapBody, 'urn:getAllRates', function(error, response) {
+                const resultDiv = document.getElementById('ratesResult');
+                if (error) {
+                    resultDiv.innerHTML = '<p>Error: ' + error.message + '</p>';
+                } else {
+                    const result = parseSOAPResponse(response);
+                    if (result) {
+                        const formattedResult = result.replace(/\n/g, '<br>');
+                        resultDiv.innerHTML = '<div>' + formattedResult + '</div>';
+                    } else {
+                        resultDiv.innerHTML = '<p>Could not parse rates result</p>';
+                    }
+                }
+            });
+        }
+        
+        function updateRate(event) {
+            event.preventDefault();
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log('Updating rate...');
+            const currency = document.getElementById('updateCurrency').value.toUpperCase();
+            const rate = document.getElementById('updateRate').value;
+            
+            if (!currency || !rate) {
+                document.getElementById('updateResult').innerHTML = '<p style="color: red;">Please fill in both currency and rate fields</p>';
+                return;
+            }
+            
+            console.log('Updating rate for', currency, 'to', rate);
+            
+            const params = `
+                <ns:currency>${currency}</ns:currency>
+                <ns:rate>${rate}</ns:rate>
+            `;
+            
+            const soapBody = createSOAPEnvelope('updateExchangeRate', params);
+            
+            sendSOAPRequest(soapBody, 'urn:updateExchangeRate', function(error, response) {
+                const resultDiv = document.getElementById('updateResult');
+                if (error) {
+                    resultDiv.innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+                    console.error('Update rate error:', error);
+                } else {
+                    console.log('Update rate response received:', response);
+                    const result = parseSOAPResponse(response);
+                    console.log('Parsed result:', result);
+                    
+                    if (result) {
+                        const isSuccess = result.includes('Success');
+                        resultDiv.innerHTML = '<p style="color: ' + (isSuccess ? 'green' : 'red') + ';">' + result + '</p>';
+                        
+                        // Clear form on success and refresh data
+                        if (isSuccess) {
+                            console.log('Update successful, clearing form and refreshing data');
+                            document.getElementById('updateCurrency').value = '';
+                            document.getElementById('updateRate').value = '';
+                            setTimeout(refreshAllData, 500); // Refresh after short delay
+                        }
+                    } else {
+                        resultDiv.innerHTML = '<p style="color: orange;">Could not parse update result. Check console for details.</p>';
+                        console.error('Failed to parse SOAP response:', response);
+                        
+                        // Try to extract any error information from the response
+                        if (response.includes('fault') || response.includes('error')) {
+                            resultDiv.innerHTML += '<p style="color: red;">Server returned an error. Check console for details.</p>';
+                        }
+                    }
+                }
+            });
+        }
+        
+        function addCurrency(event) {
+            event.preventDefault();
+            
+            const currency = document.getElementById('newCurrency').value.toUpperCase();
+            const rate = document.getElementById('newRate').value;
+            
+            if (!currency || !rate) {
+                document.getElementById('addResult').innerHTML = '<p style="color: red;">Please fill in both currency and rate fields</p>';
+                return;
+            }
+            
+            const params = `
+                <ns:currency>${currency}</ns:currency>
+                <ns:rate>${rate}</ns:rate>
+            `;
+            
+            const soapBody = createSOAPEnvelope('addCurrency', params);
+            
+            sendSOAPRequest(soapBody, 'urn:addCurrency', function(error, response) {
+                const resultDiv = document.getElementById('addResult');
+                if (error) {
+                    resultDiv.innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+                    console.error('Add currency error:', error);
+                } else {
+                    const result = parseSOAPResponse(response);
+                    if (result) {
+                        resultDiv.innerHTML = '<p style="color: ' + (result.includes('Success') ? 'green' : 'red') + ';">' + result + '</p>';
+                        // Clear form on success and refresh data
+                        if (result.includes('Success')) {
+                            document.getElementById('newCurrency').value = '';
+                            document.getElementById('newRate').value = '';
+                            setTimeout(refreshAllData, 500); // Refresh after short delay
+                        }
+                    } else {
+                        resultDiv.innerHTML = '<p style="color: orange;">Could not parse add result. Check console for details.</p>';
+                        console.error('Failed to parse SOAP response:', response);
+                    }
+                }
+            });
+        }
+        
+        function removeCurrency(event) {
+            event.preventDefault();
+            
+            const currency = document.getElementById('removeCurrency').value.toUpperCase();
+            
+            if (!currency) {
+                document.getElementById('removeResult').innerHTML = '<p style="color: red;">Please enter a currency code</p>';
+                return;
+            }
+            
+            console.log('Removing currency:', currency);
+            
+            const params = `
+                <ns:currency>${currency}</ns:currency>
+            `;
+            
+            const soapBody = createSOAPEnvelope('removeCurrency', params);
+            
+            sendSOAPRequest(soapBody, 'urn:removeCurrency', function(error, response) {
+                const resultDiv = document.getElementById('removeResult');
+                if (error) {
+                    resultDiv.innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+                    console.error('Remove currency error:', error);
+                } else {
+                    console.log('Remove currency response received:', response);
+                    const result = parseSOAPResponse(response);
+                    console.log('Parsed result:', result);
+                    
+                    if (result) {
+                        const isSuccess = result.includes('Success');
+                        resultDiv.innerHTML = '<p style="color: ' + (isSuccess ? 'green' : 'red') + ';">' + result + '</p>';
+                        
+                        // Clear form on success and refresh data
+                        if (isSuccess) {
+                            console.log('Remove successful, clearing form and refreshing data');
+                            document.getElementById('removeCurrency').value = '';
+                            setTimeout(refreshAllData, 500); // Refresh after short delay
+                        }
+                    } else {
+                        resultDiv.innerHTML = '<p style="color: orange;">Could not parse remove result. Check console for details.</p>';
+                        console.error('Failed to parse SOAP response:', response);
+                        
+                        // Try to extract any error information from the response
+                        if (response.includes('fault') || response.includes('error')) {
+                            resultDiv.innerHTML += '<p style="color: red;">Server returned an error. Check console for details.</p>';
+                        }
+                    }
+                }
+            });
+        }
+        
+        function getSupportedCurrencies() {
+            const soapBody = createSOAPEnvelope('getSupportedCurrencies', '');
+            
+            sendSOAPRequest(soapBody, 'urn:getSupportedCurrencies', function(error, response) {
+                const resultDiv = document.getElementById('currenciesResult');
+                if (error) {
+                    resultDiv.innerHTML = '<p>Error: ' + error.message + '</p>';
+                } else {
+                    const result = parseSOAPResponse(response);
+                    if (result) {
+                        resultDiv.innerHTML = '<p><strong>Supported Currencies:</strong> ' + result + '</p>';
+                    } else {
+                        resultDiv.innerHTML = '<p>Could not parse currencies result</p>';
+                    }
+                }
+            });
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            // Add form submit event listeners
+            document.getElementById('updateRateForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                updateRate(event);
+            });
+
+            document.getElementById('addCurrencyForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                addCurrency(event);
+            });
+
+            document.getElementById('removeCurrencyForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                removeCurrency(event);
+            });
+
+            checkHealth();
+            refreshAllData();
+        };
+        
+        // Auto-refresh data every 15 seconds
+        setInterval(refreshAllData, 15000);
+    </script>
+</body>
+</html> 

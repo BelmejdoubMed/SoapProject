@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<currencyService xmlns:cur="http://service.currency.com">
+    <service>
+        <name>Currency Conversion Service</name>
+        <endpoint>http://localhost:8000/CurrencyConversionService/services/CurrencyConverter</endpoint>
+        <description>Currency conversion web service</description>
+        <wsdlUrl>http://localhost:8000/CurrencyConversionService/services/CurrencyConverter?wsdl</wsdlUrl>
+        <operations>
+            <operation>convertCurrency</operation>
+            <operation>getConversionSummary</operation>
+            <operation>isServiceHealthy</operation>
+        </operations>
+    </service>
+    
+    <supportedCurrencies>
+        <currency>
+            <code>USD</code>
+            <name>US Dollar</name>
+            <symbol>$</symbol>
+            <country>United States</country>
+        </currency>
+        <currency>
+            <code>EUR</code>
+            <name>Euro</name>
+            <symbol>€</symbol>
+            <country>European Union</country>
+        </currency>
+        <currency>
+            <code>GBP</code>
+            <name>British Pound</name>
+            <symbol>£</symbol>
+            <country>United Kingdom</country>
+        </currency>
+        <currency>
+            <code>JPY</code>
+            <name>Japanese Yen</name>
+            <symbol>¥</symbol>
+            <country>Japan</country>
+        </currency>
+        <currency>
+            <code>CAD</code>
+            <name>Canadian Dollar</name>
+            <symbol>C$</symbol>
+            <country>Canada</country>
+        </currency>
+    </supportedCurrencies>
+    
+    <clientInfo>
+        <type>XSLT Interface</type>
+        <technology>XSL Transformations</technology>
+        <features>
+            <feature>Server-side XML transformation</feature>
+            <feature>Dynamic HTML generation</feature>
+            <feature>SOAP web service integration</feature>
+            <feature>Responsive design</feature>
+            <feature>Real-time data display</feature>
+        </features>
+        <compatibility>
+            <browser>Chrome</browser>
+            <browser>Firefox</browser>
+            <browser>Safari</browser>
+            <browser>Edge</browser>
+        </compatibility>
+    </clientInfo>
+    
+    <configuration>
+        <soap>
+            <version>1.2</version>
+            <encoding>UTF-8</encoding>
+            <contentType>application/soap+xml</contentType>
+        </soap>
+        <timeout>10000</timeout>
+        <retryAttempts>3</retryAttempts>
+    </configuration>
+</currencyService> 

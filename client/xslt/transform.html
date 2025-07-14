@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Conversion Service - XSLT Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .debug {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #bee5eb;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <div class="loading">
+            🔄 Loading Currency Conversion Interface...
+        </div>
+    </div>
+
+    <script>
+        async function loadAndTransform() {
+            const contentDiv = document.getElementById('content');
+            
+            try {
+                console.log('🚀 Starting XSLT transformation process...');
+                
+                // Step 1: Check browser support
+                if (!window.XSLTProcessor) {
+                    throw new Error('Browser does not support XSLT processing. Please use Chrome, Firefox, Safari, or Edge.');
+                }
+                
+                if (!window.DOMParser) {
+                    throw new Error('Browser does not support DOMParser.');
+                }
+                
+                console.log('✅ Browser support verified');
+                
+                // Step 2: Load files
+                console.log('📁 Loading XML and XSLT files...');
+                
+                const [xmlResponse, xslResponse] = await Promise.all([
+                    fetch('./sample-data.xml'),
+                    fetch('./clean-client.xsl')
+                ]);
+                
+                if (!xmlResponse.ok) {
+                    throw new Error(`Failed to load sample-data.xml: ${xmlResponse.status} ${xmlResponse.statusText}`);
+                }
+                
+                if (!xslResponse.ok) {
+                    throw new Error(`Failed to load clean-client.xsl: ${xslResponse.status} ${xslResponse.statusText}`);
+                }
+                
+                const xmlText = await xmlResponse.text();
+                const xslText = await xslResponse.text();
+                
+                console.log('✅ Files loaded successfully');
+                console.log(`📄 XML size: ${xmlText.length} characters`);
+                console.log(`📄 XSLT size: ${xslText.length} characters`);
+                
+                // Step 3: Parse XML documents with strict validation
+                console.log('🔍 Parsing XML documents...');
+                
+                const parser = new DOMParser();
+                
+                // Parse XML data
+                const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+                
+                // Check for XML parsing errors
+                const xmlParseError = xmlDoc.querySelector('parsererror');
+                if (xmlParseError) {
+                    throw new Error(`XML parsing error: ${xmlParseError.textContent}`);
+                }
+                
+                if (!xmlDoc.documentElement) {
+                    throw new Error('XML document has no root element');
+                }
+                
+                console.log(`✅ XML parsed - Root: ${xmlDoc.documentElement.tagName}`);
+                
+                // Parse XSLT stylesheet with additional validation
+                const xslDoc = parser.parseFromString(xslText, 'application/xml');
+                
+                // Check for XSLT parsing errors
+                const xslParseError = xslDoc.querySelector('parsererror');
+                if (xslParseError) {
+                    throw new Error(`XSLT parsing error: ${xslParseError.textContent}`);
+                }
+                
+                if (!xslDoc.documentElement) {
+                    throw new Error('XSLT document has no root element');
+                }
+                
+                // Validate XSLT document structure
+                const rootElement = xslDoc.documentElement;
+                if (rootElement.tagName !== 'xsl:stylesheet' && rootElement.tagName !== 'xsl:transform') {
+                    throw new Error(`Invalid XSLT root element: ${rootElement.tagName}. Expected xsl:stylesheet or xsl:transform`);
+                }
+                
+                if (!rootElement.namespaceURI || rootElement.namespaceURI !== 'http://www.w3.org/1999/XSL/Transform') {
+                    throw new Error(`Invalid XSLT namespace: ${rootElement.namespaceURI}`);
+                }
+                
+                console.log(`✅ XSLT parsed - Root: ${rootElement.tagName}, Namespace: ${rootElement.namespaceURI}`);
+                
+                // Step 4: Additional Node validation
+                console.log('🔍 Validating document nodes...');
+                
+                if (!(xmlDoc instanceof Document)) {
+                    throw new Error(`XML document is not a Document instance: ${xmlDoc.constructor.name}`);
+                }
+                
+                if (!(xslDoc instanceof Document)) {
+                    throw new Error(`XSLT document is not a Document instance: ${xslDoc.constructor.name}`);
+                }
+                
+                if (!(xmlDoc.documentElement instanceof Element)) {
+                    throw new Error(`XML documentElement is not an Element: ${xmlDoc.documentElement.constructor.name}`);
+                }
+                
+                if (!(xslDoc.documentElement instanceof Element)) {
+                    throw new Error(`XSLT documentElement is not an Element: ${xslDoc.documentElement.constructor.name}`);
+                }
+                
+                console.log('✅ Node validation passed');
+                
+                // Step 5: Create processor and import stylesheet
+                console.log('⚙️ Creating XSLT processor...');
+                
+                const processor = new XSLTProcessor();
+                
+                // CRITICAL FIX: Ensure we pass the document, not just the documentElement
+                console.log('📥 Importing stylesheet...');
+                console.log('XSLT Document type:', xslDoc.constructor.name);
+                console.log('XSLT Root element:', xslDoc.documentElement.tagName);
+                
+                try {
+                    processor.importStylesheet(xslDoc);
+                    console.log('✅ Stylesheet imported successfully');
+                } catch (importError) {
+                    console.error('❌ ImportStylesheet error:', importError);
+                    throw new Error(`Failed to import stylesheet: ${importError.message}`);
+                }
+                
+                // Step 6: Perform transformation
+                console.log('🔄 Performing transformation...');
+                
+                const resultDocument = processor.transformToFragment(xmlDoc, document);
+                
+                if (!resultDocument) {
+                    throw new Error('Transformation returned null result');
+                }
+                
+                console.log('✅ Transformation completed successfully');
+                console.log('Result type:', resultDocument.constructor.name);
+                console.log('Child nodes:', resultDocument.childNodes.length);
+                
+                // Step 7: Display result
+                contentDiv.innerHTML = '';
+                contentDiv.appendChild(resultDocument);
+                
+                console.log('🎉 XSLT interface loaded successfully!');
+                
+            } catch (error) {
+                console.error('❌ XSLT Error:', error);
+                
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ XSLT Transformation Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Type:</strong> ${error.constructor.name}</p>
+                    </div>
+                    
+                    <div class="debug">
+                        <h4>🔍 Debug Information:</h4>
+                        <p><strong>URL:</strong> ${window.location.href}</p>
+                        <p><strong>Protocol:</strong> ${window.location.protocol}</p>
+                        <p><strong>Browser:</strong> ${navigator.userAgent}</p>
+                        <p><strong>XSLTProcessor:</strong> ${window.XSLTProcessor ? 'Available' : 'Not Available'}</p>
+                        <p><strong>DOMParser:</strong> ${window.DOMParser ? 'Available' : 'Not Available'}</p>
+                        
+                        <h4>💡 Solutions:</h4>
+                        <ul>
+                            <li>Make sure you're accessing via HTTP (not file://)</li>
+                            <li>Ensure HTTP server is running on port 9000</li>
+                            <li>Try a different browser (Chrome, Firefox, Safari, Edge)</li>
+                            <li>Check that sample-data.xml and clean-client.xsl exist</li>
+                            <li>Alternative: <a href="../web/index.html">Use Web Interface</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: 30px; text-align: center;">
+                        <button onclick="location.reload()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                            🔄 Retry Transformation
+                        </button>
+                        <a href="../web/index.html" style="background: #28a745; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-left: 10px; display: inline-block;">
+                            🌐 Use Web Interface
+                        </a>
+                    </div>
+                `;
+            }
+        }
+        
+        // Start transformation when page loads
+        window.addEventListener('load', loadAndTransform);
+    </script>
+</body>
+</html> 

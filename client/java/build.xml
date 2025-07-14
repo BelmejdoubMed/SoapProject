@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CurrencyConversionClient" default="run" basedir=".">
+    
+    <!-- Project properties -->
+    <property name="project.name" value="CurrencyConversionClient"/>
+    <property name="project.version" value="1.0"/>
+    
+    <!-- Directory properties -->
+    <property name="src.dir" value="."/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="lib.dir" value="../../lib"/>
+    
+    <!-- Server properties (for Axis2 libraries) -->
+    <property name="axis2.home" value="/opt/axis2"/>
+    
+    <!-- Classpath -->
+    <path id="compile.classpath">
+        <fileset dir="${axis2.home}/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <!-- Include additional libraries if needed -->
+        <fileset dir="${lib.dir}" erroronmissingdir="false">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    
+    <path id="runtime.classpath">
+        <path refid="compile.classpath"/>
+        <pathelement location="${classes.dir}"/>
+    </path>
+    
+    <!-- Clean build directory -->
+    <target name="clean" description="Clean build directory">
+        <delete dir="${build.dir}"/>
+    </target>
+    
+    <!-- Initialize build -->
+    <target name="init" depends="clean">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        
+        <echo message="Building ${project.name} version ${project.version}"/>
+        <echo message="Axis2 Home: ${axis2.home}"/>
+    </target>
+    
+    <!-- Compile Java sources -->
+    <target name="compile" depends="init" description="Compile Java source files">
+        <echo message="Compiling Java client sources..."/>
+        
+        <javac srcdir="${src.dir}" 
+               destdir="${classes.dir}"
+               includeantruntime="false"
+               debug="true"
+               source="11"
+               target="11">
+            <classpath refid="compile.classpath"/>
+            <include name="**/*.java"/>
+        </javac>
+        
+        <echo message="Client compilation completed successfully"/>
+    </target>
+    
+    <!-- Run the client application -->
+    <target name="run" depends="compile" description="Run the Currency Conversion Client">
+        <echo message="Starting Currency Conversion Client..."/>
+        <echo message="Make sure the Currency Conversion Service is running on:"/>
+        <echo message="http://localhost:8000/CurrencyConversionService/services/CurrencyConverter"/>
+        <echo message=""/>
+        
+        <java classname="com.currency.client.CurrencyClientApp" 
+              fork="true"
+              failonerror="true">
+            <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+    
+    <!-- Test connection to service -->
+    <target name="test-connection" depends="compile" description="Test connection to the web service">
+        <echo message="Testing connection to Currency Conversion Service..."/>
+        
+        <java classname="com.currency.client.SOAPCurrencyClient" 
+              fork="true"
+              failonerror="false">
+            <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+    
+    <!-- Package client as JAR -->
+    <target name="jar" depends="compile" description="Create JAR file for the client">
+        <echo message="Creating client JAR file..."/>
+        
+        <jar destfile="${build.dir}/${project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="com.currency.client.CurrencyClientApp"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+        </jar>
+        
+        <echo message="JAR created: ${build.dir}/${project.name}.jar"/>
+    </target>
+    
+    <!-- Help target -->
+    <target name="help" description="Display available targets">
+        <echo message="Available targets for Currency Conversion Client:"/>
+        <echo message="  clean          - Clean build directories"/>
+        <echo message="  compile        - Compile Java client sources"/>
+        <echo message="  run            - Run the client application"/>
+        <echo message="  test-connection - Test connection to web service"/>
+        <echo message="  jar            - Create JAR file"/>
+        <echo message="  help           - Display this help"/>
+        <echo message=""/>
+        <echo message="Before running the client, ensure:"/>
+        <echo message="  1. Tomcat is running"/>
+        <echo message="  2. Currency Conversion Service is deployed"/>
+        <echo message="  3. Service is accessible at the configured URL"/>
+    </target>
+    
+</project> 

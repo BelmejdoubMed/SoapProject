@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceGroup>
+    <service name="CurrencyConverter" scope="application">
+        <description>
+            Currency Conversion Web Service
+            Provides currency conversion functionality
+        </description>
+        
+        <parameter name="ServiceClass">com.currency.service.CurrencyConversionService</parameter>
+        
+        <!-- User operations -->
+        <operation name="convertCurrency">
+            <description>Convert currency amount from one currency to another</description>
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+            <parameter name="allowedMethods">convertCurrency</parameter>
+        </operation>
+        
+        <operation name="getConversionSummary">
+            <description>Get service status and summary</description>
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+            <parameter name="allowedMethods">getConversionSummary</parameter>
+        </operation>
+        
+        <operation name="isServiceHealthy">
+            <description>Check service health status</description>
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+            <parameter name="allowedMethods">isServiceHealthy</parameter>
+        </operation>
+        
+        <operation name="getSupportedCurrencies">
+            <description>Get list of supported currencies</description>
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+            <parameter name="allowedMethods">getSupportedCurrencies</parameter>
+        </operation>
+        
+        <!-- Admin operations -->
+        <operation name="updateExchangeRate">
+            <description>Update exchange rate for a currency</description>
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+            <parameter name="allowedMethods">updateExchangeRate</parameter>
+        </operation>
+        
+        <operation name="addCurrency">
+            <description>Add new currency with exchange rate</description>
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+            <parameter name="allowedMethods">addCurrency</parameter>
+        </operation>
+        
+        <operation name="removeCurrency">
+            <description>Remove currency from the system</description>
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+            <parameter name="allowedMethods">removeCurrency</parameter>
+        </operation>
+        
+        <operation name="getAllRates">
+            <description>Get all exchange rates for admin view</description>
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+            <parameter name="allowedMethods">getAllRates</parameter>
+        </operation>
+        
+    </service>
+</serviceGroup>
