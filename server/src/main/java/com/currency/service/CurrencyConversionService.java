@@ -4,31 +4,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Currency Conversion Web Service
- * Provides currency conversion functionality with admin rate management
- */
 public class CurrencyConversionService {
     
-    // Currency rates table (base currency: USD)
     private static Map<String, Double> exchangeRates = new HashMap<>();
     
-    // Initialize with some default rates
     static {
-        exchangeRates.put("USD", 1.0);      // Base currency
-        exchangeRates.put("EUR", 0.85);     // 1 USD = 0.85 EUR
-        exchangeRates.put("GBP", 0.73);     // 1 USD = 0.73 GBP
-        exchangeRates.put("JPY", 110.0);    // 1 USD = 110 JPY
-        exchangeRates.put("CAD", 1.25);     // 1 USD = 1.25 CAD
-        exchangeRates.put("CHF", 0.92);     // 1 USD = 0.92 CHF
+        exchangeRates.put("USD", 1.0);
+        exchangeRates.put("EUR", 0.85);
+        exchangeRates.put("GBP", 0.73);
+        exchangeRates.put("JPY", 110.0);
+        exchangeRates.put("CAD", 1.25);
+        exchangeRates.put("CHF", 0.92);
     }
     
     public CurrencyConversionService() {
     }
     
-    /**
-     * Convert currency with proper rate calculation
-     */
     public String convertCurrency(double amount, String fromCurrency, String toCurrency) {
         try {
             fromCurrency = fromCurrency.toUpperCase();
@@ -41,7 +32,6 @@ public class CurrencyConversionService {
                 return "Error: Currency " + toCurrency + " not supported";
             }
             
-            // Convert to USD first, then to target currency
             double fromRate = exchangeRates.get(fromCurrency);
             double toRate = exchangeRates.get(toCurrency);
             
@@ -57,9 +47,6 @@ public class CurrencyConversionService {
         }
     }
     
-    /**
-     * Get all supported currencies and their rates
-     */
     public String getConversionSummary() {
         StringBuilder summary = new StringBuilder();
         summary.append("Currency Conversion Service Status: Ready\n");
@@ -72,18 +59,10 @@ public class CurrencyConversionService {
         return summary.toString();
     }
     
-    /**
-     * Health check method
-     */
     public boolean isServiceHealthy() {
         return true;
     }
     
-    // ADMIN METHODS
-    
-    /**
-     * Update exchange rate for a currency (Admin only)
-     */
     public String updateExchangeRate(String currency, double rate) {
         try {
             currency = currency.toUpperCase();
@@ -104,9 +83,6 @@ public class CurrencyConversionService {
         }
     }
     
-    /**
-     * Add new currency (Admin only)
-     */
     public String addCurrency(String currency, double rate) {
         try {
             currency = currency.toUpperCase();
@@ -127,9 +103,6 @@ public class CurrencyConversionService {
         }
     }
     
-    /**
-     * Remove currency (Admin only)
-     */
     public String removeCurrency(String currency) {
         try {
             currency = currency.toUpperCase();
@@ -150,9 +123,6 @@ public class CurrencyConversionService {
         }
     }
     
-    /**
-     * Get all exchange rates (Admin view)
-     */
     public String getAllRates() {
         StringBuilder rates = new StringBuilder();
         rates.append("All Exchange Rates (base: USD):\n");
@@ -164,9 +134,6 @@ public class CurrencyConversionService {
         return rates.toString();
     }
     
-    /**
-     * Get supported currencies list
-     */
     public String getSupportedCurrencies() {
         return String.join(", ", exchangeRates.keySet());
     }

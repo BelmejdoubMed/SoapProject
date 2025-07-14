@@ -1,26 +1,17 @@
-// Currency Conversion Web Client JavaScript
-
-// Service Configuration
 const SERVICE_CONFIG = {
     baseUrl: 'http://localhost:8000/CurrencyConversionService/services/CurrencyConverter',
     namespace: 'http://service.currency.com',
     timeout: 10000
 };
 
-// DOM Elements
 const statusDot = document.getElementById('statusDot');
 const statusText = document.getElementById('statusText');
 const loadingOverlay = document.getElementById('loadingOverlay');
 
-// Initialize application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Currency Conversion Client initialized');
     checkInitialConnection();
 });
 
-/**
- * Check initial connection to the service
- */
 async function checkInitialConnection() {
     try {
         updateStatus('checking', 'Checking connection...');
@@ -32,33 +23,22 @@ async function checkInitialConnection() {
             updateStatus('disconnected', 'Service not healthy');
         }
     } catch (error) {
-        console.error('Initial connection check failed:', error);
         updateStatus('disconnected', 'Connection failed');
     }
 }
 
-/**
- * Update connection status display
- */
 function updateStatus(status, message) {
     statusDot.className = `status-dot ${status}`;
     statusText.textContent = message;
 }
 
-/**
- * Show/hide loading overlay
- */
 function showLoading(show = true) {
     loadingOverlay.classList.toggle('show', show);
 }
 
-/**
- * Create SOAP envelope for service calls
- */
 function createSoapEnvelope(operation, parameters = {}) {
     let soapBody = `<cur:${operation} xmlns:cur="${SERVICE_CONFIG.namespace}">`;
     
-    // Add parameters to SOAP body
     for (const [key, value] of Object.entries(parameters)) {
         soapBody += `<cur:${key}>${value}</cur:${key}>`;
     }
@@ -75,13 +55,8 @@ function createSoapEnvelope(operation, parameters = {}) {
         </soapenv:Envelope>`;
 }
 
-/**
- * Call SOAP web service
- */
 async function callSoapService(operation, parameters = {}) {
     const soapEnvelope = createSoapEnvelope(operation, parameters);
-    
-    console.log('SOAP Request:', soapEnvelope);
     
     try {
         const response = await fetch(SERVICE_CONFIG.baseUrl, {
@@ -98,24 +73,18 @@ async function callSoapService(operation, parameters = {}) {
         }
 
         const responseText = await response.text();
-        console.log('SOAP Response:', responseText);
         return extractValueFromSoapResponse(responseText);
         
     } catch (error) {
-        console.error(`SOAP call failed for ${operation}:`, error);
         throw new Error(`Service call failed: ${error.message}`);
     }
 }
 
-/**
- * Extract value from SOAP response
- */
 function extractValueFromSoapResponse(soapResponse) {
     try {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(soapResponse, 'text/xml');
         
-        // Look for return value in different possible locations
         const returnElements = [
             xmlDoc.querySelector('return'),
             xmlDoc.querySelector('[localName="return"]'),
@@ -126,7 +95,6 @@ function extractValueFromSoapResponse(soapResponse) {
             return returnElements[0].textContent.trim();
         }
         
-        // If no return element, try to get the first text content from body
         const body = xmlDoc.querySelector('Body') || xmlDoc.querySelector('[localName="Body"]');
         if (body) {
             const firstChild = body.firstElementChild;
@@ -138,14 +106,10 @@ function extractValueFromSoapResponse(soapResponse) {
         throw new Error('Could not extract value from SOAP response');
         
     } catch (error) {
-        console.error('Error parsing SOAP response:', error);
         throw new Error('Invalid SOAP response format');
     }
 }
 
-/**
- * Display result in a container
- */
 function displayResult(containerId, message, type = 'info') {
     const container = document.getElementById(containerId);
     container.className = `${containerId} show result-${type}`;
@@ -156,9 +120,6 @@ function displayResult(containerId, message, type = 'info') {
         </div>`;
 }
 
-/**
- * Check service health
- */
 async function checkHealth() {
     const btn = document.getElementById('healthBtn');
     const originalText = btn.innerHTML;
@@ -187,9 +148,6 @@ async function checkHealth() {
     }
 }
 
-/**
- * Convert currency
- */
 async function convertCurrency(event) {
     event.preventDefault();
     
@@ -197,12 +155,10 @@ async function convertCurrency(event) {
     const originalText = btn.innerHTML;
     
     try {
-        // Get form values
         const amount = parseFloat(document.getElementById('amount').value);
         const fromCurrency = document.getElementById('fromCurrency').value;
         const toCurrency = document.getElementById('toCurrency').value;
         
-        // Validation
         if (isNaN(amount) || amount <= 0) {
             displayResult('conversionResult', 'Please enter a valid amount greater than 0', 'error');
             return;
@@ -234,9 +190,6 @@ async function convertCurrency(event) {
     }
 }
 
-/**
- * Get service summary
- */
 async function getSummary() {
     const btn = document.getElementById('summaryBtn');
     const originalText = btn.innerHTML;
@@ -256,250 +209,148 @@ async function getSummary() {
     }
 }
 
-/**
- * Get supported currencies and update dropdowns
- */
 async function getSupportedCurrencies() {
     try {
         const result = await callSoapService('getSupportedCurrencies');
-        return result.split(', ').sort();
+        return result.split(',').map(c => c.trim());
     } catch (error) {
-        console.error('Error getting supported currencies:', error);
-        return ['USD', 'EUR', 'GBP', 'JPY', 'CAD']; // fallback
+        return [];
     }
 }
 
-/**
- * Update currency dropdowns dynamically
- */
 async function updateCurrencyDropdowns() {
     try {
         const currencies = await getSupportedCurrencies();
-        const dropdowns = document.querySelectorAll('select[id*="Currency"]');
+        const fromSelect = document.getElementById('fromCurrency');
+        const toSelect = document.getElementById('toCurrency');
         
-        dropdowns.forEach(dropdown => {
-            const currentValue = dropdown.value;
-            dropdown.innerHTML = '';
-            
-            currencies.forEach(currency => {
-                const option = document.createElement('option');
-                option.value = currency;
-                option.textContent = currency;
-                dropdown.appendChild(option);
-            });
-            
-            // Restore selection if it still exists
-            if (currencies.includes(currentValue)) {
-                dropdown.value = currentValue;
-            }
+        fromSelect.innerHTML = '';
+        toSelect.innerHTML = '';
+        
+        currencies.forEach(currency => {
+            fromSelect.add(new Option(currency, currency));
+            toSelect.add(new Option(currency, currency));
         });
+        
     } catch (error) {
-        console.error('Error updating currency dropdowns:', error);
+        displayResult('conversionResult', 'Failed to update currency list', 'error');
     }
 }
 
-/**
- * Admin function: Get all exchange rates
- */
 async function getAllRates() {
     try {
         const result = await callSoapService('getAllRates');
-        displayResult('adminResult', result.replace(/\n/g, '<br>'), 'info');
+        displayResult('ratesResult', result.replace(/\n/g, '<br>'), 'info');
     } catch (error) {
-        displayResult('adminResult', `Failed to get rates: ${error.message}`, 'error');
+        displayResult('ratesResult', `Failed to get rates: ${error.message}`, 'error');
     }
 }
 
-/**
- * Admin function: Update exchange rate
- */
 async function updateExchangeRate(currency, rate) {
     try {
         const result = await callSoapService('updateExchangeRate', {
-            currency: currency.toUpperCase(),
-            rate: parseFloat(rate)
+            currency: currency,
+            rate: rate
         });
         
-        if (result.includes('Success')) {
-            await updateCurrencyDropdowns(); // Refresh dropdowns
-            displayResult('adminResult', result, 'success');
-        } else {
-            displayResult('adminResult', result, 'error');
-        }
+        displayResult('adminResult', result, 'success');
+        await updateCurrencyDropdowns();
+        await getAllRates();
         
-        return result;
     } catch (error) {
-        const errorMsg = `Failed to update rate: ${error.message}`;
-        displayResult('adminResult', errorMsg, 'error');
-        throw new Error(errorMsg);
+        displayResult('adminResult', `Failed to update rate: ${error.message}`, 'error');
     }
 }
 
-/**
- * Admin function: Add new currency
- */
 async function addCurrency(currency, rate) {
     try {
         const result = await callSoapService('addCurrency', {
-            currency: currency.toUpperCase(),
-            rate: parseFloat(rate)
+            currency: currency,
+            rate: rate
         });
         
-        if (result.includes('Success')) {
-            await updateCurrencyDropdowns(); // Refresh dropdowns
-            displayResult('adminResult', result, 'success');
-        } else {
-            displayResult('adminResult', result, 'error');
-        }
+        displayResult('adminResult', result, 'success');
+        await updateCurrencyDropdowns();
+        await getAllRates();
         
-        return result;
     } catch (error) {
-        const errorMsg = `Failed to add currency: ${error.message}`;
-        displayResult('adminResult', errorMsg, 'error');
-        throw new Error(errorMsg);
+        displayResult('adminResult', `Failed to add currency: ${error.message}`, 'error');
     }
 }
 
-/**
- * Admin function: Remove currency
- */
 async function removeCurrency(currency) {
     try {
         const result = await callSoapService('removeCurrency', {
-            currency: currency.toUpperCase()
+            currency: currency
         });
         
-        if (result.includes('Success')) {
-            await updateCurrencyDropdowns(); // Refresh dropdowns
-            displayResult('adminResult', result, 'success');
-        } else {
-            displayResult('adminResult', result, 'error');
-        }
+        displayResult('adminResult', result, 'success');
+        await updateCurrencyDropdowns();
+        await getAllRates();
         
-        return result;
     } catch (error) {
-        const errorMsg = `Failed to remove currency: ${error.message}`;
-        displayResult('adminResult', errorMsg, 'error');
-        throw new Error(errorMsg);
+        displayResult('adminResult', `Failed to remove currency: ${error.message}`, 'error');
     }
 }
 
-/**
- * Test all operations including admin ones
- */
 async function testAllOperations() {
-    const btn = document.getElementById('testAllBtn');
-    const originalText = btn.innerHTML;
-    const container = document.getElementById('testResults');
+    const testBtn = document.getElementById('testBtn');
+    const originalText = testBtn.innerHTML;
+    const testResults = document.getElementById('testResults');
     
     try {
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
-        showLoading(true);
-        
-        container.className = 'test-results show';
-        container.innerHTML = '<h4>🧪 Running Tests...</h4>';
+        testBtn.disabled = true;
+        testBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+        testResults.innerHTML = '';
         
         const tests = [
             {
                 name: 'Health Check',
-                operation: 'isServiceHealthy',
-                params: {},
-                icon: '🏥'
+                fn: async () => {
+                    const result = await callSoapService('isServiceHealthy');
+                    if (result !== 'true') throw new Error('Service not healthy');
+                }
             },
             {
-                name: 'Service Summary',
-                operation: 'getConversionSummary',
-                params: {},
-                icon: '📊'
+                name: 'Get Summary',
+                fn: async () => {
+                    const result = await callSoapService('getConversionSummary');
+                    if (!result.includes('Ready')) throw new Error('Service not ready');
+                }
             },
             {
-                name: 'Supported Currencies',
-                operation: 'getSupportedCurrencies',
-                params: {},
-                icon: '💰'
+                name: 'Get Currencies',
+                fn: async () => {
+                    const result = await callSoapService('getSupportedCurrencies');
+                    if (!result.includes('USD')) throw new Error('Base currency not found');
+                }
             },
             {
-                name: 'Currency Conversion (USD to EUR)',
-                operation: 'convertCurrency',
-                params: { amount: 100, fromCurrency: 'USD', toCurrency: 'EUR' },
-                icon: '💱'
-            },
-            {
-                name: 'All Exchange Rates',
-                operation: 'getAllRates',
-                params: {},
-                icon: '📈'
+                name: 'Convert Currency',
+                fn: async () => {
+                    const result = await callSoapService('convertCurrency', {
+                        amount: 100,
+                        fromCurrency: 'USD',
+                        toCurrency: 'EUR'
+                    });
+                    if (!result.includes('EUR')) throw new Error('Conversion failed');
+                }
             }
         ];
         
-        let results = '<h4>🧪 Test Results</h4>';
-        
-        for (let i = 0; i < tests.length; i++) {
-            const test = tests[i];
-            results += `<div class="test-item">
-                <strong>${test.icon} ${test.name}</strong><br>
-                <span style="color: #666;">Testing...</span>
-            </div>`;
-            container.innerHTML = results;
-            
+        for (const test of tests) {
             try {
-                const result = await callSoapService(test.operation, test.params);
-                const lastTestDiv = container.lastElementChild;
-                lastTestDiv.className = 'test-item success';
-                lastTestDiv.innerHTML = `
-                    <strong>✅ ${test.icon} ${test.name}</strong><br>
-                    <span style="color: #2e7d32;">Result: ${result.substring(0, 100)}${result.length > 100 ? '...' : ''}</span>
-                `;
+                await test.fn();
+                testResults.innerHTML += `<div class="test-result success">✅ ${test.name} passed</div>`;
             } catch (error) {
-                const lastTestDiv = container.lastElementChild;
-                lastTestDiv.className = 'test-item error';
-                lastTestDiv.innerHTML = `
-                    <strong>❌ ${test.icon} ${test.name}</strong><br>
-                    <span style="color: #c62828;">Error: ${error.message}</span>
-                `;
+                testResults.innerHTML += `<div class="test-result error">❌ ${test.name} failed: ${error.message}</div>`;
             }
-            
-            // Small delay between tests for better UX
-            await new Promise(resolve => setTimeout(resolve, 500));
         }
         
-        results += '<div style="margin-top: 15px; font-weight: bold; color: #667eea;">🎉 All tests completed!</div>';
-        container.innerHTML = results;
-        
     } catch (error) {
-        container.innerHTML = `<div class="test-item error">
-            <strong>❌ Test Suite Failed</strong><br>
-            <span style="color: #c62828;">Error: ${error.message}</span>
-        </div>`;
+        testResults.innerHTML += `<div class="test-result error">❌ Tests failed: ${error.message}</div>`;
     } finally {
-        btn.disabled = false;
-        btn.innerHTML = originalText;
-        showLoading(false);
+        testBtn.disabled = false;
+        testBtn.innerHTML = originalText;
     }
-}
-
-// Auto-refresh currency dropdowns every 10 seconds
-setInterval(updateCurrencyDropdowns, 10000);
-
-// Initialize currency dropdowns on load
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(updateCurrencyDropdowns, 2000); // Wait for initial connection
-});
-
-// Utility function to handle CORS issues in development
-function handleCorsError() {
-    const corsMessage = `
-        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 10px 0;">
-            <strong>⚠️ CORS Issue Detected</strong><br>
-            <p>If you're seeing CORS errors, try one of these solutions:</p>
-            <ul style="margin: 10px 0; padding-left: 20px;">
-                <li>Use a browser extension to disable CORS (for development only)</li>
-                <li>Start Chrome with: <code>--disable-web-security --user-data-dir</code></li>
-                <li>Deploy this client to the same server as your web service</li>
-                <li>Configure CORS headers on your Tomcat server</li>
-            </ul>
-        </div>
-    `;
-    return corsMessage;
 } 

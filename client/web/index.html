@@ -9,7 +9,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header class="header">
             <div class="logo">
                 <i class="fas fa-exchange-alt"></i>
@@ -21,9 +20,7 @@
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Service Health Section -->
             <section class="card">
                 <h2><i class="fas fa-heartbeat"></i> Service Health</h2>
                 <div class="health-check">
@@ -34,7 +31,6 @@
                 </div>
             </section>
 
-            <!-- Currency Conversion Section -->
             <section class="card">
                 <h2><i class="fas fa-coins"></i> Currency Conversion</h2>
                 <form class="conversion-form" onsubmit="convertCurrency(event)">
@@ -71,7 +67,6 @@
                 <div class="conversion-result" id="conversionResult"></div>
             </section>
 
-            <!-- Service Summary Section -->
             <section class="card">
                 <h2><i class="fas fa-info-circle"></i> Service Summary</h2>
                 <button onclick="getSummary()" class="btn btn-secondary" id="summaryBtn">
@@ -80,23 +75,20 @@
                 <div class="summary-result" id="summaryResult"></div>
             </section>
 
-            <!-- Test All Operations -->
             <section class="card">
                 <h2><i class="fas fa-flask"></i> Test All Operations</h2>
-                <button onclick="testAllOperations()" class="btn btn-accent" id="testAllBtn">
+                <button onclick="testAllOperations()" class="btn btn-accent" id="testBtn">
                     <i class="fas fa-play"></i> Run All Tests
                 </button>
                 <div class="test-results" id="testResults"></div>
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="footer">
             <p>&copy; 2024 Currency Conversion Client - Connected to Web Service</p>
         </footer>
     </div>
 
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
         <p>Processing request...</p>

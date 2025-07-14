@@ -8,7 +8,6 @@
         
         <parameter name="ServiceClass">com.currency.service.CurrencyConversionService</parameter>
         
-        <!-- User operations -->
         <operation name="convertCurrency">
             <description>Convert currency amount from one currency to another</description>
             <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
@@ -33,7 +32,6 @@
             <parameter name="allowedMethods">getSupportedCurrencies</parameter>
         </operation>
         
-        <!-- Admin operations -->
         <operation name="updateExchangeRate">
             <description>Update exchange rate for a currency</description>
             <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>

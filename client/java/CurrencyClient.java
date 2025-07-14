@@ -7,12 +7,11 @@ public class CurrencyClient {
     private static Scanner scanner = new Scanner(System.in);
     
     public static void main(String[] args) {
-        System.out.println("=== Currency Conversion Client ===");
-        System.out.println("Connecting to: " + SERVICE_URL);
+        printHeader("Currency Conversion Client");
         
         while (true) {
             showMenu();
-            int choice = getIntInput("Choose an option (1-6): ");
+            int choice = getIntInput("Choice (1-6): ");
             
             switch (choice) {
                 case 1:
@@ -25,42 +24,39 @@ public class CurrencyClient {
                     getSummary();
                     break;
                 case 4:
-                    // Admin functions
                     adminMenu();
                     break;
                 case 5:
                     getSupportedCurrencies();
                     break;
                 case 6:
-                    System.out.println("Goodbye!");
                     return;
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println("Invalid option");
             }
-            System.out.println();
         }
     }
     
     private static void showMenu() {
-        System.out.println("\n=== Main Menu ===");
+        printHeader("Main Menu");
         System.out.println("1. Convert Currency");
-        System.out.println("2. Check Service Health");
-        System.out.println("3. Get Service Summary");
-        System.out.println("4. Admin Functions");
-        System.out.println("5. Get Supported Currencies");
+        System.out.println("2. Check Health");
+        System.out.println("3. Summary");
+        System.out.println("4. Admin");
+        System.out.println("5. Currencies");
         System.out.println("6. Exit");
     }
     
     private static void adminMenu() {
         while (true) {
-            System.out.println("\n=== Admin Menu ===");
-            System.out.println("1. View All Exchange Rates");
-            System.out.println("2. Update Exchange Rate");
-            System.out.println("3. Add New Currency");
+            printHeader("Admin Menu");
+            System.out.println("1. View Rates");
+            System.out.println("2. Update Rate");
+            System.out.println("3. Add Currency");
             System.out.println("4. Remove Currency");
-            System.out.println("5. Back to Main Menu");
+            System.out.println("5. Back");
             
-            int choice = getIntInput("Choose admin option (1-5): ");
+            int choice = getIntInput("Choice (1-5): ");
             
             switch (choice) {
                 case 1:
@@ -78,18 +74,18 @@ public class CurrencyClient {
                 case 5:
                     return;
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println("Invalid option");
             }
         }
     }
     
     private static void convertCurrency() {
-        System.out.println("\n--- Currency Conversion ---");
+        printHeader("Currency Conversion");
         
-        double amount = getDoubleInput("Enter amount: ");
-        System.out.print("Enter from currency (e.g., USD): ");
+        double amount = getDoubleInput("Amount: ");
+        System.out.print("From currency: ");
         String fromCurrency = scanner.nextLine().trim().toUpperCase();
-        System.out.print("Enter to currency (e.g., EUR): ");
+        System.out.print("To currency: ");
         String toCurrency = scanner.nextLine().trim().toUpperCase();
         
         String params = String.format(
@@ -98,34 +94,34 @@ public class CurrencyClient {
         );
         
         String result = callWebService("convertCurrency", params);
-        System.out.println("Result: " + result);
+        System.out.println(result);
     }
     
     private static void checkHealth() {
-        System.out.println("\n--- Service Health Check ---");
+        printHeader("Health Check");
         String result = callWebService("isServiceHealthy", "");
         boolean healthy = result != null && result.contains("true");
-        System.out.println("Service is " + (healthy ? "healthy" : "not healthy"));
+        System.out.println(healthy ? "Service is healthy" : "Service is not healthy");
     }
     
     private static void getSummary() {
-        System.out.println("\n--- Service Summary ---");
+        printHeader("Service Summary");
         String result = callWebService("getConversionSummary", "");
         System.out.println(result);
     }
     
     private static void getAllRates() {
-        System.out.println("\n--- All Exchange Rates ---");
+        printHeader("Exchange Rates");
         String result = callWebService("getAllRates", "");
         System.out.println(result);
     }
     
     private static void updateRate() {
-        System.out.println("\n--- Update Exchange Rate ---");
+        printHeader("Update Rate");
         
-        System.out.print("Enter currency code (e.g., EUR): ");
+        System.out.print("Currency code: ");
         String currency = scanner.nextLine().trim().toUpperCase();
-        double rate = getDoubleInput("Enter new rate (to USD): ");
+        double rate = getDoubleInput("New rate: ");
         
         String params = String.format(
             "<cur:currency>%s</cur:currency><cur:rate>%f</cur:rate>",
@@ -133,15 +129,15 @@ public class CurrencyClient {
         );
         
         String result = callWebService("updateExchangeRate", params);
-        System.out.println("Result: " + result);
+        System.out.println(result);
     }
     
     private static void addCurrency() {
-        System.out.println("\n--- Add New Currency ---");
+        printHeader("Add Currency");
         
-        System.out.print("Enter currency code (e.g., AUD): ");
+        System.out.print("Currency code: ");
         String currency = scanner.nextLine().trim().toUpperCase();
-        double rate = getDoubleInput("Enter exchange rate (to USD): ");
+        double rate = getDoubleInput("Exchange rate: ");
         
         String params = String.format(
             "<cur:currency>%s</cur:currency><cur:rate>%f</cur:rate>",
@@ -149,25 +145,25 @@ public class CurrencyClient {
         );
         
         String result = callWebService("addCurrency", params);
-        System.out.println("Result: " + result);
+        System.out.println(result);
     }
     
     private static void removeCurrency() {
-        System.out.println("\n--- Remove Currency ---");
+        printHeader("Remove Currency");
         
-        System.out.print("Enter currency code to remove (e.g., JPY): ");
+        System.out.print("Currency code: ");
         String currency = scanner.nextLine().trim().toUpperCase();
         
         String params = String.format("<cur:currency>%s</cur:currency>", currency);
         
         String result = callWebService("removeCurrency", params);
-        System.out.println("Result: " + result);
+        System.out.println(result);
     }
     
     private static void getSupportedCurrencies() {
-        System.out.println("\n--- Supported Currencies ---");
+        printHeader("Supported Currencies");
         String result = callWebService("getSupportedCurrencies", "");
-        System.out.println("Supported currencies: " + result);
+        System.out.println(result);
     }
     
     private static String callWebService(String method, String params) {
@@ -181,13 +177,11 @@ public class CurrencyClient {
             connection.setRequestProperty("SOAPAction", "");
             connection.setDoOutput(true);
             
-            // Send request
             try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream())) {
                 writer.write(soapBody);
                 writer.flush();
             }
             
-            // Read response
             StringBuilder response = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()))) {
@@ -197,7 +191,6 @@ public class CurrencyClient {
                 }
             }
             
-            // Parse SOAP response
             String responseText = response.toString();
             int startIndex = responseText.indexOf("<ns:return>");
             if (startIndex == -1) {
@@ -212,12 +205,12 @@ public class CurrencyClient {
                 
                 if (endIndex != -1) {
                     String tag = responseText.substring(startIndex).startsWith("<ns:return>") ? "ns:return" : "return";
-                    startIndex += tag.length() + 2; // +2 for < and >
+                    startIndex += tag.length() + 2;
                     return responseText.substring(startIndex, endIndex);
                 }
             }
             
-            return "Could not parse response";
+            return "Error: Could not parse response";
             
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -237,6 +230,10 @@ public class CurrencyClient {
                "</soap:Envelope>";
     }
     
+    private static void printHeader(String title) {
+        System.out.println("\n=== " + title + " ===");
+    }
+    
     private static int getIntInput(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -244,7 +241,7 @@ public class CurrencyClient {
                 String input = scanner.nextLine().trim();
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
+                System.out.println("Please enter a valid number");
             }
         }
     }
@@ -256,7 +253,7 @@ public class CurrencyClient {
                 String input = scanner.nextLine().trim();
                 return Double.parseDouble(input);
             } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
+                System.out.println("Please enter a valid number");
             }
         }
     }
