@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<currencyService>
+    <serviceInfo>
+        <n>Currency Exchange Service</n>
+        <version>1.0</version>
+        <status>active</status>
+    </serviceInfo>
+    <currencies>
+        <currency>
+            <code>USD</code>
+            <n>US Dollar</n>
+            <rate>1.0</rate>
+            <lastUpdate>2024-12-19T15:30:00</lastUpdate>
+        </currency>
+        <currency>
+            <code>EUR</code>
+            <n>Euro</n>
+            <rate>0.8564</rate>
+            <lastUpdate>2024-12-19T15:30:00</lastUpdate>
+        </currency>
+        <currency>
+            <code>GBP</code>
+            <n>British Pound</n>
+            <rate>0.7891</rate>
+            <lastUpdate>2024-12-19T15:30:00</lastUpdate>
+        </currency>
+        <currency>
+            <code>JPY</code>
+            <n>Japanese Yen</n>
+            <rate>149.52</rate>
+            <lastUpdate>2024-12-19T15:30:00</lastUpdate>
+        </currency>
+        <currency>
+            <code>CAD</code>
+            <n>Canadian Dollar</n>
+            <rate>1.3542</rate>
+            <lastUpdate>2024-12-19T15:30:00</lastUpdate>
+        </currency>
+        <currency>
+            <code>CHF</code>
+            <n>Swiss Franc</n>
+            <rate>0.8892</rate>
+            <lastUpdate>2024-12-19T15:30:00</lastUpdate>
+        </currency>
+        <currency>
+            <code>AUD</code>
+            <n>Australian Dollar</n>
+            <rate>1.5234</rate>
+            <lastUpdate>2024-12-19T15:30:00</lastUpdate>
+        </currency>
+    </currencies>
+    <lastUpdate>2024-12-19T15:30:00</lastUpdate>
+</currencyService>

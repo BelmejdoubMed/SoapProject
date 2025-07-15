@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency Converter</title>
+    <meta charset="UTF-8">
+    <script>
+        function loadUserInterface() {
+            console.log('Loading user interface...');
+            
+            // Load XML file
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "../xml/currency-service.xml", true);
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        console.log('XML loaded successfully');
+                        loadXSLAndTransform(this.responseXML);
+                    } else {
+                        console.error('Failed to load XML:', this.status, this.statusText);
+                        document.body.innerHTML = '<div style="color: red; text-align: center; padding: 20px;">Error loading XML data: ' + this.status + '</div>';
+                    }
+                }
+            };
+            xmlhttp.onerror = function() {
+                console.error('Network error loading XML');
+                document.body.innerHTML = '<div style="color: red; text-align: center; padding: 20px;">Network error loading XML data</div>';
+            };
+            xmlhttp.send();
+        }
+
+        function loadXSLAndTransform(xmlDoc) {
+            console.log('Loading XSL stylesheet...');
+            
+            // Load XSL file
+            var xslhttp = new XMLHttpRequest();
+            xslhttp.open("GET", "../xslt/user-client.xsl", true);
+            
+            // Try to force XML response type
+            if (xslhttp.overrideMimeType) {
+                xslhttp.overrideMimeType('text/xml');
+            }
+            
+            xslhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        console.log('XSL loaded successfully');
+                        
+                        var xsl = this.responseXML;
+                        
+                        // If responseXML is null, try to parse the text manually
+                        if (!xsl && this.responseText) {
+                            console.log('Attempting to parse XSL text manually...');
+                            try {
+                                var parser = new DOMParser();
+                                xsl = parser.parseFromString(this.responseText, 'text/xml');
+                                console.log('Manual parsing successful:', xsl);
+                            } catch (parseError) {
+                                console.error('Failed to parse XSL text:', parseError);
+                                document.body.innerHTML = '<div style="color: red; text-align: center; padding: 20px;">Error parsing XSL stylesheet: ' + parseError.message + '</div>';
+                                return;
+                            }
+                        }
+                        
+                        if (xsl) {
+                            try {
+                                var processor = new XSLTProcessor();
+                                processor.importStylesheet(xsl);
+                                
+                                // Transform to a complete document instead of fragment
+                                var resultDoc = processor.transformToDocument(xmlDoc);
+                                
+                                // Replace the entire document with the transformed result
+                                if (resultDoc && resultDoc.documentElement) {
+                                    // Get the HTML content from the result document
+                                    var newHtml = new XMLSerializer().serializeToString(resultDoc);
+                                    
+                                    // Replace the current document
+                                    document.open();
+                                    document.write(newHtml);
+                                    document.close();
+                                    
+                                    console.log('Transformation completed successfully');
+                                } else {
+                                    console.error('Transformation result is empty');
+                                    document.body.innerHTML = '<div style="color: red; text-align: center; padding: 20px;">Transformation result is empty</div>';
+                                }
+                            } catch (error) {
+                                console.error('Error during transformation:', error);
+                                document.body.innerHTML = '<div style="color: red; text-align: center; padding: 20px;">Error during XSLT transformation: ' + error.message + '</div>';
+                            }
+                        } else {
+                            console.error('No XSL document available');
+                            document.body.innerHTML = '<div style="color: red; text-align: center; padding: 20px;">No XSL document could be loaded or parsed</div>';
+                        }
+                    } else {
+                        console.error('Failed to load XSL:', this.status, this.statusText);
+                        document.body.innerHTML = '<div style="color: red; text-align: center; padding: 20px;">Error loading XSL stylesheet: ' + this.status + '</div>';
+                    }
+                }
+            };
+            xslhttp.onerror = function() {
+                console.error('Network error loading XSL');
+                document.body.innerHTML = '<div style="color: red; text-align: center; padding: 20px;">Network error loading XSL stylesheet</div>';
+            };
+            xslhttp.send();
+        }
+
+        // Function for refreshing data (compatibility with XSL)
+        function loadXMLDoc() {
+            loadUserInterface();
+        }
+
+        window.onload = loadUserInterface;
+    </script>
+</head>
+<body>
+    <div style="text-align: center; padding: 20px; font-family: Arial, sans-serif;">
+        <h2>Loading currency converter...</h2>
+        <p>Please wait while we load the currency exchange service.</p>
+    </div>
+</body>
+</html> 
