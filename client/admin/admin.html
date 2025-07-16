@@ -8,244 +8,358 @@
 
         body {
             font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
             min-height: 100vh;
-            color: #333;
+            color: #e8e8e8;
             line-height: 1.6;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         .dashboard-container {
             display: flex;
             min-height: 100vh;
+            position: relative;
         }
 
-        /* Sidebar */
+        /* Sidebar Navigation */
         .sidebar {
             width: 280px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            padding: 0;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255,255,255,0.1);
+            padding: 30px 0;
             position: fixed;
+            left: 0;
+            top: 0;
             height: 100vh;
             overflow-y: auto;
+            z-index: 100;
         }
 
         .sidebar-header {
-            padding: 30px 20px;
+            padding: 0 30px 30px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .sidebar-title {
-            color: #fff;
+        .sidebar-logo {
             font-size: 24px;
-            font-weight: 700;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 8px;
         }
 
         .sidebar-subtitle {
-            color: #bdc3c7;
+            color: #a8b2d1;
             font-size: 14px;
         }
 
-        .sidebar-nav {
-            padding: 20px 0;
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
         .nav-item {
-            padding: 15px 25px;
-            color: #ecf0f1;
+            padding: 18px 30px;
+            color: #a8b2d1;
             cursor: pointer;
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            font-weight: 500;
+            position: relative;
+            margin: 5px 0;
         }
 
         .nav-item:hover, .nav-item.active {
-            background: rgba(52, 152, 219, 0.2);
-            border-left-color: #3498db;
-            color: #fff;
+            background: rgba(102, 126, 234, 0.15);
+            border-left-color: #667eea;
+            color: #ffffff;
+            transform: translateX(5px);
         }
 
         .nav-item i {
             width: 20px;
             text-align: center;
+            font-size: 16px;
         }
 
         /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 280px;
-            padding: 30px;
+            padding: 0;
             background: transparent;
+            min-height: 100vh;
+        }
+
+        .content-wrapper {
+            padding: 30px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 25px 30px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            padding: 35px 40px;
+            border-radius: 24px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 300px;
         }
 
         .header-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            font-size: 38px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .header-subtitle {
-            color: #7f8c8d;
+            color: #a8b2d1;
             font-size: 16px;
+            font-weight: 500;
         }
 
         .header-actions {
             display: flex;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         /* Cards */
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
 
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.15);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f8f9fa;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
         }
 
         .card-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #2c3e50;
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
         .card-title i {
-            color: #3498db;
+            color: #64b5f6;
+            font-size: 28px;
         }
 
         /* Buttons */
         .btn {
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             text-decoration: none;
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #27ae60, #219a52);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4);
         }
 
         .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(17, 153, 142, 0.6);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
         }
 
         .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 65, 108, 0.6);
         }
 
         .btn-sm {
-            padding: 8px 16px;
+            padding: 10px 20px;
             font-size: 12px;
         }
 
         /* Table */
         .table-container {
             overflow-x: auto;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
+            background: transparent;
+            border-radius: 16px;
             overflow: hidden;
         }
 
         .table th {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 18px 15px;
+            padding: 20px 18px;
             text-align: left;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 14px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .table th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
         }
 
         .table td {
-            padding: 18px 15px;
-            border-bottom: 1px solid #f1f3f4;
+            padding: 20px 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             font-size: 14px;
+            color: #e8e8e8;
         }
 
         .table tbody tr {
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .table tbody tr:hover {
-            background-color: #f8f9fa;
+            background: rgba(255,255,255,0.08);
+            transform: scale(1.01);
         }
 
         .table tbody tr:last-child td {
@@ -256,29 +370,49 @@
         .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 25px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .status-badge:hover::before {
+            transform: translateX(100%);
         }
 
         .status-active {
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
-            color: #155724;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
         }
 
         .status-inactive {
-            background: linear-gradient(135deg, #f8d7da, #f1aeb5);
-            color: #721c24;
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
         }
 
         /* Action buttons */
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         /* Modal */
@@ -289,32 +423,53 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             z-index: 1000;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
         }
 
         .modal.show {
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: modalFadeIn 0.3s ease;
+            animation: modalFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { 
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 40px;
+            border-radius: 24px;
             width: 90%;
-            max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 550px;
+            box-shadow: 
+                0 25px 80px rgba(0,0,0,0.5),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
             transform: scale(0.9);
-            animation: modalSlideIn 0.3s ease forwards;
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
         }
 
         @keyframes modalSlideIn {
@@ -327,589 +482,1024 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f8f9fa;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
         }
 
         .modal-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-title i {
+            color: #64b5f6;
         }
 
         .close-btn {
-            background: none;
+            background: rgba(255,255,255,0.1);
             border: none;
             font-size: 24px;
             cursor: pointer;
-            color: #95a5a6;
-            padding: 5px;
+            color: #a8b2d1;
+            padding: 8px;
             border-radius: 50%;
             transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .close-btn:hover {
-            background: #f8f9fa;
-            color: #e74c3c;
+            background: rgba(255,255,255,0.2);
+            color: #ff416c;
+            transform: rotate(90deg);
         }
 
         /* Form */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 8px;
-            color: #2c3e50;
+            margin-bottom: 10px;
+            color: #ffffff;
             font-weight: 600;
             font-size: 14px;
+            letter-spacing: 0.5px;
         }
 
         .form-input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
+            padding: 16px 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
             font-size: 14px;
             transition: all 0.3s ease;
-            background: #fff;
+            background: rgba(255,255,255,0.05);
+            color: #ffffff;
+            backdrop-filter: blur(10px);
         }
 
         .form-input:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .form-input::placeholder {
+            color: #a8b2d1;
         }
 
         .button-group {
             display: flex;
             gap: 15px;
             justify-content: flex-end;
-            margin-top: 30px;
+            margin-top: 35px;
         }
 
-        /* Stats cards */
+        /* Stats Grid - Improved Layout */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            padding: 35px 30px;
+            border-radius: 24px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 
+                0 25px 70px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.15);
         }
 
         .stat-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 24px;
+            font-size: 32px;
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .stat-card:hover .stat-icon::before {
+            transform: translateX(100%);
         }
 
         .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
         }
 
         .stat-label {
-            color: #7f8c8d;
-            font-size: 14px;
-            font-weight: 500;
+            color: #a8b2d1;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         /* Currency rate display */
         .rate-display {
             font-family: 'Monaco', 'Consolas', monospace;
+            font-weight: 700;
+            color: #38ef7d;
+            background: rgba(56, 239, 125, 0.15);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(56, 239, 125, 0.3);
+        }
+
+        /* Quick Actions Card */
+        .quick-actions {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .quick-actions h3 {
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quick-actions h3 i {
+            color: #64b5f6;
+        }
+
+        .quick-actions .btn {
+            width: 100%;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        /* Alert Container - Better Positioning */
+        #alert-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .alert {
+            padding: 18px 24px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid;
+            display: none;
+            backdrop-filter: blur(10px);
             font-weight: 600;
-            color: #27ae60;
-            background: rgba(39, 174, 96, 0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         /* Success/Error messages */
-        .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid;
-            display: none;
-        }
-
         .alert-success {
-            background: #d4edda;
-            border-color: #27ae60;
-            color: #155724;
+            background: rgba(56, 239, 125, 0.15);
+            border-color: #38ef7d;
+            color: #38ef7d;
+            border: 1px solid rgba(56, 239, 125, 0.3);
         }
 
         .alert-error {
-            background: #f8d7da;
-            border-color: #e74c3c;
-            color: #721c24;
+            background: rgba(255, 65, 108, 0.15);
+            border-color: #ff416c;
+            color: #ff416c;
+            border: 1px solid rgba(255, 65, 108, 0.3);
         }
 
         /* Responsive design */
+        @media (max-width: 1200px) {
+            .content-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar-section {
+                order: -1;
+            }
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
             }
 
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
             .main-content {
                 margin-left: 0;
+            }
+
+            .content-wrapper {
                 padding: 20px;
+            }
+
+            .header {
+                padding: 25px;
             }
 
             .header-content {
                 flex-direction: column;
-                gap: 15px;
+                gap: 20px;
                 text-align: center;
+            }
+
+            .header-title {
+                font-size: 28px;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .modal-content {
+                padding: 30px;
+                margin: 20px;
+            }
+
+            #alert-container {
+                top: 20px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
             }
         }
-    </style></head><body><div class="dashboard-container"><div class="sidebar"><div class="sidebar-header"><div class="sidebar-title"><i class="fas fa-coins"></i>
-                    CurrencyAdmin
-                </div><div class="sidebar-subtitle">Management Portal</div></div><nav class="sidebar-nav"><div class="nav-item active" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></div><div class="nav-item" onclick="showSection('currencies')"><i class="fas fa-money-bill-wave"></i><span>Currencies</span></div><div class="nav-item" onclick="showSection('settings')"><i class="fas fa-cog"></i><span>Settings</span></div></nav></div><div class="main-content"><div class="header"><div class="header-content"><div><h1 class="header-title">Currency Management Dashboard</h1><p class="header-subtitle">Manage exchange rates and currency operations</p></div><div class="header-actions"><button class="btn btn-primary" onclick="showAddModal()"><i class="fas fa-plus"></i>
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+    </head>
+    <body>
+        <!-- Mobile Menu Toggle -->
+        <div class="mobile-menu-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="dashboard-container">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h1 class="sidebar-logo">Currency Admin</h1>
+                    <p class="sidebar-subtitle">Manage exchange rates and currency operations</p>
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li class="nav-item active" onclick="showSection('dashboard')">
+                            <i class="fas fa-home"></i>
+                            Dashboard
+                        </li>
+                        <li class="nav-item" onclick="showSection('currencies')">
+                            <i class="fas fa-coins"></i>
+                            Currencies
+                        </li>
+                        <li class="nav-item" onclick="showSection('rates')">
+                            <i class="fas fa-chart-line"></i>
+                            Exchange Rates
+                        </li>
+                        <li class="nav-item" onclick="showSection('history')">
+                            <i class="fas fa-history"></i>
+                            Transaction History
+                        </li>
+                        <li class="nav-item" onclick="showSection('settings')">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <div class="content-wrapper">
+                    <!-- Header Section -->
+                    <div class="header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1 class="header-title">Currency Management Dashboard</h1>
+                                <p class="header-subtitle">Manage exchange rates and currency operations</p>
+                            </div>
+                            <div class="header-actions">
+                                <button class="btn btn-primary" onclick="showAddModal()">
+                                    <i class="fas fa-plus"></i>
+                                    Add Currency
+                                </button>
+                                <button class="btn btn-success" onclick="refreshData()">
+                                    <i class="fas fa-sync-alt"></i>
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alert Container -->
+                    <div id="alert-container"></div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Active Currencies</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-value">22.28</div>
+                            <div class="stat-label">Avg Exchange Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="stat-value">1.0</div>
+                            <div class="stat-label">Service Version</div>
+                        </div>
+                    </div>
+
+                    <!-- Content Sections -->
+                    <div class="content-sections">
+                        <!-- Main Section -->
+                        <div class="main-section">
+                            <!-- Service Information Card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Service Information
+                                    </h2>
+                                </div>
+                                <div class="table-container">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Service Name</strong></td>
+                                                <td>Currency Exchange Service</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Status</strong></td>
+                                                <td>
+                                                    <span class="status-badge status-active">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        Active
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Version</strong></td>
+                                                <td>1.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Last Updated</strong></td>
+                                                <td>2024-12-19T15:30:00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Currency Management Card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">
+                                        <i class="fas fa-coins"></i>
+                                        Currency Management
+                                    </h2>
+                                </div>
+                                <div class="table-container">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Currency Code</th>
+                                                <th>Currency Name</th>
+                                                <th>Exchange Rate (USD)</th>
+                                                <th>Last Updated</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Currency data will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Section -->
+                        <div class="sidebar-section">
+                            <!-- Quick Actions -->
+                            <div class="quick-actions">
+                                <h3>
+                                    <i class="fas fa-bolt"></i>
+                                    Quick Actions
+                                </h3>
+                                <button class="btn btn-primary" onclick="showAddModal()">
+                                    <i class="fas fa-plus"></i>
+                                    Add New Currency
+                                </button>
+                                <button class="btn btn-success" onclick="refreshData()">
+                                    <i class="fas fa-sync-alt"></i>
+                                    Refresh Data
+                                </button>
+                                <button class="btn btn-danger" onclick="exportData()">
+                                    <i class="fas fa-download"></i>
+                                    Export Data
+                                </button>
+                            </div>
+
+                            <!-- System Status -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">
+                                        <i class="fas fa-server"></i>
+                                        System Status
+                                    </h2>
+                                </div>
+                                <div style="padding: 20px 0;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                        <span>CPU Usage</span>
+                                        <span style="color: #38ef7d;">23%</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                        <span>Memory Usage</span>
+                                        <span style="color: #ffd700;">67%</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                        <span>Disk Space</span>
+                                        <span style="color: #38ef7d;">45%</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span>Network</span>
+                                        <span style="color: #38ef7d;">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Currency Modal -->
+        <div id="addCurrencyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">
+                        <i class="fas fa-plus-circle"></i>
+                        Add New Currency
+                    </h2>
+                    <button class="close-btn" onclick="closeModal('addCurrencyModal')">×</button>
+                </div>
+                <form id="addCurrencyForm" onsubmit="return handleAddCurrency(event)">
+                    <div class="form-group">
+                        <label class="form-label">Currency Code</label>
+                        <input type="text" name="code" class="form-input" required="required" maxlength="3" 
+                               placeholder="e.g., USD" oninput="this.value = this.value.toUpperCase()" 
+                               style="text-transform: uppercase;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Currency Name</label>
+                        <input type="text" name="name" class="form-input" required="required" 
+                               placeholder="e.g., US Dollar">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Exchange Rate (to USD)</label>
+                        <input type="number" name="rate" class="form-input" required="required" 
+                               step="0.000001" min="0" placeholder="e.g., 1.0">
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('addCurrencyModal')">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i>
                             Add Currency
-                        </button><button class="btn btn-success" onclick="refreshData()"><i class="fas fa-sync-alt"></i>
-                            Refresh
-                        </button></div></div></div><div id="alert-container"></div><div class="stats-grid"><div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div class="stat-value">7</div><div class="stat-label">Active Currencies</div></div><div class="stat-card"><div class="stat-icon"><i class="fas fa-chart-line"></i></div><div class="stat-value">22.28</div><div class="stat-label">Avg Exchange Rate</div></div><div class="stat-card"><div class="stat-icon"><i class="fas fa-server"></i></div><div class="stat-value">1.0</div><div class="stat-label">Service Version</div></div></div><div class="card"><div class="card-header"><h2 class="card-title"><i class="fas fa-info-circle"></i>
-                Service Information
-            </h2></div><div class="table-container"><table class="table"><tbody><tr><td><strong>Service Name</strong></td><td>Currency Exchange Service</td></tr><tr><td><strong>Status</strong></td><td><span class="status-badge status-active"><i class="fas fa-check-circle"></i>
-                                Active
-                            </span></td></tr><tr><td><strong>Version</strong></td><td>1.0</td></tr><tr><td><strong>Last Updated</strong></td><td>2024-12-19T15:30:00</td></tr></tbody></table></div></div></div></div><div id="addCurrencyModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="modal-title"><i class="fas fa-plus-circle"></i>
-                    Add New Currency
-                </h2><button class="close-btn" onclick="closeModal('addCurrencyModal')">×</button></div><form id="addCurrencyForm" onsubmit="return handleAddCurrency(event)"><div class="form-group"><label class="form-label">Currency Code</label><input type="text" name="code" class="form-input" required="required" maxlength="3" placeholder="e.g., USD" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></div><div class="form-group"><label class="form-label">Currency Name</label><input type="text" name="name" class="form-input" required="required" placeholder="e.g., US Dollar"></div><div class="form-group"><label class="form-label">Exchange Rate (to USD)</label><input type="number" name="rate" class="form-input" required="required" step="0.000001" min="0" placeholder="e.g., 1.0"></div><div class="button-group"><button type="button" class="btn btn-danger" onclick="closeModal('addCurrencyModal')"><i class="fas fa-times"></i>
-                        Cancel
-                    </button><button type="submit" class="btn btn-success"><i class="fas fa-save"></i>
-                        Add Currency
-                    </button></div></form></div></div><div id="editCurrencyModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="modal-title"><i class="fas fa-edit"></i>
-                    Edit Currency
-                </h2><button class="close-btn" onclick="closeModal('editCurrencyModal')">×</button></div><form id="editCurrencyForm" onsubmit="return handleEditCurrency(event)"><input type="hidden" name="originalCode"><div class="form-group"><label class="form-label">Currency Code</label><input type="text" name="code" class="form-input" required="required" maxlength="3" placeholder="e.g., USD" oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;"></div><div class="form-group"><label class="form-label">Currency Name</label><input type="text" name="name" class="form-input" required="required"></div><div class="form-group"><label class="form-label">Exchange Rate (to USD)</label><input type="number" name="rate" class="form-input" required="required" step="0.000001" min="0"></div><div class="button-group"><button type="button" class="btn btn-danger" onclick="closeModal('editCurrencyModal')"><i class="fas fa-times"></i>
-                        Cancel
-                    </button><button type="submit" class="btn btn-success"><i class="fas fa-save"></i>
-                        Update Currency
-                    </button></div></form></div></div><script>//
-        // SOAP service configuration
-        var SOAP_ENDPOINT = 'http://localhost:8000/CurrencyConversionService/services/CurrencyConverter';
-        var SOAP_NAMESPACE = 'http://service.currency.com';
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-        function showAlert(message, type) {
-            if (!type) type = 'success';
-            var alertContainer = document.getElementById('alert-container');
-            var alert = document.createElement('div');
-            alert.className = 'alert alert-' + type;
-            
-            // Create icon element
-            var icon = document.createElement('i');
-            icon.className = 'fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-triangle');
-            
-            // Create text node
-            var textNode = document.createTextNode(' ' + message);
-            
-            // Append icon and text to alert
-            alert.appendChild(icon);
-            alert.appendChild(textNode);
-            alert.style.display = 'block';
-            
-            alertContainer.innerHTML = '';
-            alertContainer.appendChild(alert);
-            
-            setTimeout(function() {
-                alert.style.display = 'none';
-            }, 5000);
-        }
+        <!-- Edit Currency Modal -->
+        <div id="editCurrencyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">
+                        <i class="fas fa-edit"></i>
+                        Edit Currency
+                    </h2>
+                    <button class="close-btn" onclick="closeModal('editCurrencyModal')">×</button>
+                </div>
+                <form id="editCurrencyForm" onsubmit="return handleEditCurrency(event)">
+                    <input type="hidden" name="originalCode">
+                    <div class="form-group">
+                        <label class="form-label">Currency Code</label>
+                        <input type="text" name="code" class="form-input" required="required" maxlength="3" 
+                               placeholder="e.g., USD" oninput="this.value = this.value.toUpperCase()" 
+                               style="text-transform: uppercase;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Currency Name</label>
+                        <input type="text" name="name" class="form-input" required="required">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Exchange Rate (to USD)</label>
+                        <input type="number" name="rate" class="form-input" required="required" 
+                               step="0.000001" min="0">
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('editCurrencyModal')">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i>
+                            Update Currency
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-        function showSection(section) {
-            // Update active nav item
-            document.querySelectorAll('.nav-item').forEach(function(item) {
-                item.classList.remove('active');
-            });
-            event.target.closest('.nav-item').classList.add('active');
-            
-            // For now, just show alert - can be expanded later
-            if (section !== 'currencies') {
-                showAlert(section.charAt(0).toUpperCase() + section.slice(1) + ' section - Coming Soon!', 'success');
+        <script>
+            // SOAP service configuration
+            var SOAP_ENDPOINT = 'http://localhost:8000/CurrencyConversionService/services/CurrencyConverter';
+            var SOAP_NAMESPACE = 'http://service.currency.com';
+
+            // Mobile sidebar toggle
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('show');
             }
-        }
 
-        function showAddModal() {
-            document.getElementById('addCurrencyModal').classList.add('show');
-        }
-
-        function showEditModal(code, name, rate) {
-            var form = document.getElementById('editCurrencyForm');
-            form.elements['originalCode'].value = code;
-            form.elements['code'].value = code;
-            form.elements['name'].value = name;
-            form.elements['rate'].value = rate;
-            document.getElementById('editCurrencyModal').classList.add('show');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-
-        function refreshData() {
-            showAlert('Refreshing data from service...', 'success');
-            
-            // Fetch live data from SOAP service instead of reloading static XML
-            sendSOAPRequest('getAllRates', {})
-            .then(function(result) {
-                // Parse the result and update the table
-                updateCurrencyTable(result);
-                showAlert('Data refreshed successfully!', 'success');
-            })
-            .catch(function(error) {
-                console.error('Error refreshing data:', error);
-                showAlert('Failed to refresh data: ' + error.message, 'error');
-                // Fallback to page reload if SOAP call fails
-                setTimeout(function() {
-                    window.location.reload();
-                }, 1000);
-            });
-        }
-
-        function updateCurrencyTable(ratesData) {
-            try {
-                console.log('Parsing rates data:', ratesData);
-                // Parse the rates data - it should be a formatted string with currency info
-                var lines = ratesData.split('\n');
-                var currencies = [];
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                const sidebar = document.getElementById('sidebar');
+                const mobileToggle = document.querySelector('.mobile-menu-toggle');
                 
-                for (var i = 0; i < lines.length; i++) {
-                    var line = lines[i].trim();
-                    if (line && line.includes('=')) {
-                        var parts = line.split('=');
-                        if (parts.length >= 2) {
-                            var code = parts[0].trim();
-                            var rate = parts[1].trim();
-                            
-                            // Parse all currencies including USD
-                            if (code.length === 3 && !isNaN(parseFloat(rate))) {
-                                currencies.push({
-                                    code: code,
-                                    name: getCurrencyName(code),
-                                    rate: parseFloat(rate),
-                                    lastUpdate: new Date().toISOString().substring(0, 19)
-                                });
+                if (window.innerWidth <= 768) {
+                    if (!sidebar.contains(event.target) && !mobileToggle.contains(event.target)) {
+                        sidebar.classList.remove('show');
+                    }
+                }
+            });
+
+            function showAlert(message, type) {
+                if (!type) type = 'success';
+                var alertContainer = document.getElementById('alert-container');
+                var alert = document.createElement('div');
+                alert.className = 'alert alert-' + type;
+                
+                // Create icon element
+                var icon = document.createElement('i');
+                icon.className = 'fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-triangle');
+                
+                // Create text node
+                var textNode = document.createTextNode(' ' + message);
+                
+                // Append icon and text to alert
+                alert.appendChild(icon);
+                alert.appendChild(textNode);
+                alert.style.display = 'block';
+                
+                alertContainer.innerHTML = '';
+                alertContainer.appendChild(alert);
+                
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 5000);
+            }
+
+            function showSection(section) {
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(function(item) {
+                    item.classList.remove('active');
+                });
+                event.target.closest('.nav-item').classList.add('active');
+                
+                // For now, just show alert - can be expanded later
+                if (section !== 'currencies') {
+                    showAlert(section.charAt(0).toUpperCase() + section.slice(1) + ' section - Coming Soon!', 'success');
+                }
+            }
+
+            function exportData() {
+                showAlert('Export functionality - Coming Soon!', 'success');
+            }
+
+            function showAddModal() {
+                document.getElementById('addCurrencyModal').classList.add('show');
+            }
+
+            function showEditModal(code, name, rate) {
+                var form = document.getElementById('editCurrencyForm');
+                form.elements['originalCode'].value = code;
+                form.elements['code'].value = code;
+                form.elements['name'].value = name;
+                form.elements['rate'].value = rate;
+                document.getElementById('editCurrencyModal').classList.add('show');
+            }
+
+            function closeModal(modalId) {
+                document.getElementById(modalId).classList.remove('show');
+            }
+
+            function refreshData() {
+                showAlert('Refreshing data from service...', 'success');
+                
+                // Fetch live data from SOAP service instead of reloading static XML
+                sendSOAPRequest('getAllRates', {})
+                .then(function(result) {
+                    // Parse the result and update the table
+                    updateCurrencyTable(result);
+                    showAlert('Data refreshed successfully!', 'success');
+                })
+                .catch(function(error) {
+                    console.error('Error refreshing data:', error);
+                    showAlert('Failed to refresh data: ' + error.message, 'error');
+                    // Fallback to page reload if SOAP call fails
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000);
+                });
+            }
+
+            function updateCurrencyTable(ratesData) {
+                try {
+                    console.log('Parsing rates data:', ratesData);
+                    // Parse the rates data - it should be a formatted string with currency info
+                    var lines = ratesData.split('\n');
+                    var currencies = [];
+                    
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i].trim();
+                        if (line && line.includes('=')) {
+                            var parts = line.split('=');
+                            if (parts.length >= 2) {
+                                var code = parts[0].trim();
+                                var rate = parts[1].trim();
+                                
+                                // Parse all currencies including USD
+                                if (code.length === 3 && !isNaN(parseFloat(rate))) {
+                                    currencies.push({
+                                        code: code,
+                                        name: getCurrencyName(code),
+                                        rate: parseFloat(rate),
+                                        lastUpdate: new Date().toISOString().substring(0, 19)
+                                    });
+                                }
                             }
                         }
                     }
+                    
+                    console.log('Parsed currencies:', currencies);
+                    
+                    // Update the table
+                    updateTableRows(currencies);
+                    
+                } catch (error) {
+                    console.error('Error parsing rates data:', error);
+                    throw new Error('Failed to parse currency data');
+                }
+            }
+
+            function getCurrencyName(code) {
+                var names = {
+                    'EUR': 'Euro',
+                    'GBP': 'British Pound',
+                    'JPY': 'Japanese Yen',
+                    'CAD': 'Canadian Dollar',
+                    'CHF': 'Swiss Franc',
+                    'AUD': 'Australian Dollar',
+                    'USD': 'US Dollar',
+                    'XYZ': 'Test Currency XYZ',
+                    'ZZZ': 'Test Currency ZZZ',
+                    'TEST': 'Test Currency',
+                    'SSS': 'Sample Currency SSS',
+                    'WEE': 'Wee Currency',
+                    'QWE': 'QWE Currency'
+                };
+                return names[code] || code + ' Currency';
+            }
+
+            // Initialize live data loading on page load
+            function initializeLiveData() {
+                // Wait a moment for the page to fully render, then load live data
+                setTimeout(function() {
+                    refreshData();
+                }, 2000);
+            }
+
+            // Call initialization when the page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                initializeLiveData();
+            });
+            
+            // Also call it when the window loads (as backup)
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    if (document.querySelector('.table tbody') && document.querySelector('.table tbody').children.length === 0) {
+                        initializeLiveData();
+                    }
+                }, 3000);
+            });
+
+            function updateTableRows(currencies) {
+                var tbody = document.querySelector('.table tbody');
+                if (!tbody) {
+                    console.error('Currency table not found');
+                    return;
                 }
                 
-                console.log('Parsed currencies:', currencies);
+                // Clear existing rows
+                tbody.innerHTML = '';
                 
-                // Update the table
-                updateTableRows(currencies);
-                
-            } catch (error) {
-                console.error('Error parsing rates data:', error);
-                throw new Error('Failed to parse currency data');
-            }
-        }
-
-        function getCurrencyName(code) {
-            var names = {
-                'EUR': 'Euro',
-                'GBP': 'British Pound',
-                'JPY': 'Japanese Yen',
-                'CAD': 'Canadian Dollar',
-                'CHF': 'Swiss Franc',
-                'AUD': 'Australian Dollar',
-                'USD': 'US Dollar',
-                'XYZ': 'Test Currency XYZ',
-                'ZZZ': 'Test Currency ZZZ',
-                'TEST': 'Test Currency',
-                'SSS': 'Sample Currency SSS',
-                'WEE': 'Wee Currency',
-                'QWE': 'QWE Currency'
-            };
-            return names[code] || code + ' Currency';
-        }
-
-        // Initialize live data loading on page load
-        function initializeLiveData() {
-            // Wait a moment for the page to fully render, then load live data
-            setTimeout(function() {
-                refreshData();
-            }, 2000);
-        }
-
-        // Call initialization when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeLiveData();
-        });
-        
-        // Also call it when the window loads (as backup)
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                if (document.querySelector('.table tbody') && document.querySelector('.table tbody').children.length === 0) {
-                    initializeLiveData();
+                // Add new rows
+                for (var i = 0; i < currencies.length; i++) {
+                    var currency = currencies[i];
+                    var row = document.createElement('tr');
+                    row.innerHTML = 
+                        '<td><strong>' + currency.code + '</strong></td>' +
+                        '<td>' + currency.name + '</td>' +
+                        '<td><span class="rate-display">$' + currency.rate.toFixed(6) + '</span></td>' +
+                        '<td>' + currency.lastUpdate + '</td>' +
+                        '<td>' +
+                            '<div class="action-buttons">' +
+                                '<button class="btn btn-primary btn-sm" onclick="showEditModal(\'' + currency.code + '\', \'' + currency.name + '\', \'' + currency.rate + '\')">' +
+                                    '<i class="fas fa-edit"></i> Edit' +
+                                '</button>' +
+                                '<button class="btn btn-danger btn-sm" onclick="handleDeleteCurrency(\'' + currency.code + '\', \'' + currency.name + '\')">' +
+                                    '<i class="fas fa-trash"></i> Delete' +
+                                '</button>' +
+                            '</div>' +
+                        '</td>';
+                    tbody.appendChild(row);
                 }
-            }, 3000);
-        });
-
-        function updateTableRows(currencies) {
-            var tbody = document.querySelector('.table tbody');
-            if (!tbody) {
-                console.error('Currency table not found');
-                return;
             }
-            
-            // Clear existing rows
-            tbody.innerHTML = '';
-            
-            // Add new rows
-            for (var i = 0; i < currencies.length; i++) {
-                var currency = currencies[i];
-                var row = document.createElement('tr');
-                row.innerHTML = 
-                    '<td><strong>' + currency.code + '</strong></td>' +
-                    '<td>' + currency.name + '</td>' +
-                    '<td><span class="rate-display">$' + currency.rate.toFixed(6) + '</span></td>' +
-                    '<td>' + currency.lastUpdate + '</td>' +
-                    '<td>' +
-                        '<div class="action-buttons">' +
-                            '<button class="btn btn-primary btn-sm" onclick="showEditModal(\'' + currency.code + '\', \'' + currency.name + '\', \'' + currency.rate + '\')">' +
-                                '<i class="fas fa-edit"></i> Edit' +
-                            '</button>' +
-                            '<button class="btn btn-danger btn-sm" onclick="handleDeleteCurrency(\'' + currency.code + '\', \'' + currency.name + '\')">' +
-                                '<i class="fas fa-trash"></i> Delete' +
-                            '</button>' +
-                        '</div>' +
-                    '</td>';
-                tbody.appendChild(row);
-            }
-        }
 
-        // Create SOAP envelope for requests
-        function createSOAPEnvelope(methodName, parameters) {
-            var soapBody = '';
-            if (parameters) {
-                for (var key in parameters) {
-                    if (parameters.hasOwnProperty(key)) {
-                        // Only escape characters that would break XML structure
-                        var value = String(parameters[key])
-                            .replace(/&/g, '&amp;')
-                            .replace(/</g, '&lt;')
-                            .replace(/>/g, '&gt;');
-                        soapBody += String.fromCharCode(60) + 'cur:' + key + String.fromCharCode(62) + value + String.fromCharCode(60) + '/cur:' + key + String.fromCharCode(62);
+            // Create SOAP envelope for requests
+            function createSOAPEnvelope(methodName, parameters) {
+                var soapBody = '';
+                if (parameters) {
+                    for (var key in parameters) {
+                        if (parameters.hasOwnProperty(key)) {
+                            // Only escape characters that would break XML structure
+                            var value = String(parameters[key])
+                                .replace(/&/g, '&amp;')
+                                .replace(/</g, '&lt;')
+                                .replace(/>/g, '&gt;');
+                            soapBody += String.fromCharCode(60) + 'cur:' + key + String.fromCharCode(62) + value + String.fromCharCode(60) + '/cur:' + key + String.fromCharCode(62);
+                        }
                     }
                 }
+
+                // Build envelope using character codes to avoid HTML encoding
+                var envelope = String.fromCharCode(60) + '?xml version="1.0" encoding="UTF-8"?' + String.fromCharCode(62) +
+                              String.fromCharCode(60) + 'soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cur="' + SOAP_NAMESPACE + '"' + String.fromCharCode(62) +
+                              String.fromCharCode(60) + 'soap:Header/' + String.fromCharCode(62) +
+                              String.fromCharCode(60) + 'soap:Body' + String.fromCharCode(62) +
+                              String.fromCharCode(60) + 'cur:' + methodName + String.fromCharCode(62) +
+                              soapBody +
+                              String.fromCharCode(60) + '/cur:' + methodName + String.fromCharCode(62) +
+                              String.fromCharCode(60) + '/soap:Body' + String.fromCharCode(62) +
+                              String.fromCharCode(60) + '/soap:Envelope' + String.fromCharCode(62);
+                
+                console.log('Generated SOAP envelope:', envelope);
+                return envelope;
             }
 
-            // Build envelope using character codes to avoid HTML encoding
-            var envelope = String.fromCharCode(60) + '?xml version="1.0" encoding="UTF-8"?' + String.fromCharCode(62) +
-                          String.fromCharCode(60) + 'soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cur="' + SOAP_NAMESPACE + '"' + String.fromCharCode(62) +
-                          String.fromCharCode(60) + 'soap:Header/' + String.fromCharCode(62) +
-                          String.fromCharCode(60) + 'soap:Body' + String.fromCharCode(62) +
-                          String.fromCharCode(60) + 'cur:' + methodName + String.fromCharCode(62) +
-                          soapBody +
-                          String.fromCharCode(60) + '/cur:' + methodName + String.fromCharCode(62) +
-                          String.fromCharCode(60) + '/soap:Body' + String.fromCharCode(62) +
-                          String.fromCharCode(60) + '/soap:Envelope' + String.fromCharCode(62);
-            
-            console.log('Generated SOAP envelope:', envelope);
-            return envelope;
-        }
+            // Send SOAP request
+            function sendSOAPRequest(methodName, parameters) {
+                var soapEnvelope = createSOAPEnvelope(methodName, parameters);
+                
+                console.log('Sending SOAP request to:', SOAP_ENDPOINT);
+                console.log('Method:', methodName);
+                console.log('Parameters:', parameters);
+                console.log('SOAP envelope length:', soapEnvelope.length);
+                
+                return fetch(SOAP_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/xml; charset=utf-8',
+                        'SOAPAction': methodName
+                    },
+                    body: soapEnvelope
+                })
+                .then(function(response) { 
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+                    }
+                    return response.text(); 
+                })
+                .then(function(responseText) {
+                    console.log('Raw response:', responseText);
+                    
+                    // Parse SOAP response
+                    var parser = new DOMParser();
+                    var xmlDoc = parser.parseFromString(responseText, 'text/xml');
+                    
+                    // Check for parsing errors
+                    var parseError = xmlDoc.getElementsByTagName('parsererror')[0];
+                    if (parseError) {
+                        console.error('XML parsing error:', parseError.textContent);
+                        throw new Error('XML parsing error: ' + parseError.textContent);
+                    }
+                    
+                    // Check for SOAP faults
+                    var fault = xmlDoc.getElementsByTagName('soap:Fault')[0] || 
+                               xmlDoc.getElementsByTagName('soapenv:Fault')[0] ||
+                               xmlDoc.getElementsByTagName('Fault')[0];
+                    if (fault) {
+                        var faultString = fault.getElementsByTagName('faultstring')[0] || 
+                                         fault.getElementsByTagName('soap:faultstring')[0];
+                        var errorMsg = faultString ? faultString.textContent : fault.textContent;
+                        console.error('SOAP Fault:', errorMsg);
+                        throw new Error('SOAP Fault: ' + errorMsg);
+                    }
+                    
+                    // Extract the result - try different possible element names
+                    var returnElement = xmlDoc.getElementsByTagName('ns:return')[0] ||
+                                       xmlDoc.getElementsByTagName('return')[0] ||
+                                       xmlDoc.getElementsByTagName('ns2:return')[0];
+                    if (returnElement) {
+                        console.log('Found return element:', returnElement.textContent);
+                        return returnElement.textContent;
+                    }
+                    
+                    console.log('No return element found, returning success message');
+                    return 'Operation completed successfully';
+                })
+                .catch(function(error) {
+                    console.error('SOAP request failed:', error);
+                    throw error;
+                });
+            }
 
-        // Send SOAP request
-        function sendSOAPRequest(methodName, parameters) {
-            var soapEnvelope = createSOAPEnvelope(methodName, parameters);
-            
-            console.log('Sending SOAP request to:', SOAP_ENDPOINT);
-            console.log('Method:', methodName);
-            console.log('Parameters:', parameters);
-            console.log('SOAP envelope length:', soapEnvelope.length);
-            
-            return fetch(SOAP_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/xml; charset=utf-8',
-                    'SOAPAction': methodName
-                },
-                body: soapEnvelope
-            })
-            .then(function(response) { 
-                console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
-                if (!response.ok) {
-                    throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+            function handleAddCurrency(event) {
+                event.preventDefault();
+                var formData = new FormData(event.target);
+                
+                var currencyCode = formData.get('code').toUpperCase().trim();
+                var currencyName = formData.get('name').trim();
+                var currencyRate = formData.get('rate');
+                
+                // Validate currency code
+                if (currencyCode.length !== 3) {
+                    showAlert('Currency code must be exactly 3 characters long', 'error');
+                    return false;
                 }
-                return response.text(); 
-            })
-            .then(function(responseText) {
-                console.log('Raw response:', responseText);
                 
-                // Parse SOAP response
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(responseText, 'text/xml');
-                
-                // Check for parsing errors
-                var parseError = xmlDoc.getElementsByTagName('parsererror')[0];
-                if (parseError) {
-                    console.error('XML parsing error:', parseError.textContent);
-                    throw new Error('XML parsing error: ' + parseError.textContent);
+                if (!/^[A-Z]{3}$/.test(currencyCode)) {
+                    showAlert('Currency code must contain only uppercase letters', 'error');
+                    return false;
                 }
                 
-                // Check for SOAP faults
-                var fault = xmlDoc.getElementsByTagName('soap:Fault')[0] || 
-                           xmlDoc.getElementsByTagName('soapenv:Fault')[0] ||
-                           xmlDoc.getElementsByTagName('Fault')[0];
-                if (fault) {
-                    var faultString = fault.getElementsByTagName('faultstring')[0] || 
-                                     fault.getElementsByTagName('soap:faultstring')[0];
-                    var errorMsg = faultString ? faultString.textContent : fault.textContent;
-                    console.error('SOAP Fault:', errorMsg);
-                    throw new Error('SOAP Fault: ' + errorMsg);
+                if (!currencyName) {
+                    showAlert('Currency name is required', 'error');
+                    return false;
                 }
                 
-                // Extract the result - try different possible element names
-                var returnElement = xmlDoc.getElementsByTagName('ns:return')[0] ||
-                                   xmlDoc.getElementsByTagName('return')[0] ||
-                                   xmlDoc.getElementsByTagName('ns2:return')[0];
-                if (returnElement) {
-                    console.log('Found return element:', returnElement.textContent);
-                    return returnElement.textContent;
-                }
-                
-                console.log('No return element found, returning success message');
-                return 'Operation completed successfully';
-            })
-            .catch(function(error) {
-                console.error('SOAP request failed:', error);
-                throw error;
-            });
-        }
-
-        function handleAddCurrency(event) {
-            event.preventDefault();
-            var formData = new FormData(event.target);
-            
-            var currencyCode = formData.get('code').toUpperCase().trim();
-            var currencyName = formData.get('name').trim();
-            var currencyRate = formData.get('rate');
-            
-            // Validate currency code
-            if (currencyCode.length !== 3) {
-                showAlert('Currency code must be exactly 3 characters long', 'error');
-                return false;
-            }
-            
-            if (!/^[A-Z]{3}$/.test(currencyCode)) {
-                showAlert('Currency code must contain only uppercase letters', 'error');
-                return false;
-            }
-            
-            if (!currencyName) {
-                showAlert('Currency name is required', 'error');
-                return false;
-            }
-            
-            var parameters = {
-                currency: currencyCode,
-                rate: currencyRate
-            };
-            
-            showAlert('Adding currency...', 'success');
-            
-            sendSOAPRequest('addCurrency', parameters)
-            .then(function(result) {
-                showAlert('Currency ' + currencyCode + ' added successfully!', 'success');
-                closeModal('addCurrencyModal');
-                event.target.reset();
-                // Refresh data after successful operation
-                setTimeout(function() {
-                    refreshData();
-                }, 1500);
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-                showAlert('Failed to add currency: ' + error.message, 'error');
-            });
-            
-            return false;
-        }
-
-        function handleEditCurrency(event) {
-            event.preventDefault();
-            var formData = new FormData(event.target);
-            
-            var currencyCode = formData.get('code').toUpperCase().trim();
-            var currencyRate = formData.get('rate');
-            
-            // Validate currency code
-            if (currencyCode.length !== 3) {
-                showAlert('Currency code must be exactly 3 characters long', 'error');
-                return false;
-            }
-            
-            if (!/^[A-Z]{3}$/.test(currencyCode)) {
-                showAlert('Currency code must contain only uppercase letters', 'error');
-                return false;
-            }
-            
-            var parameters = {
-                currency: currencyCode,
-                rate: currencyRate
-            };
-            
-            showAlert('Updating currency...', 'success');
-            
-            sendSOAPRequest('updateExchangeRate', parameters)
-            .then(function(result) {
-                showAlert('Currency ' + currencyCode + ' updated successfully!', 'success');
-                closeModal('editCurrencyModal');
-                // Refresh data after successful operation
-                setTimeout(function() {
-                    refreshData();
-                }, 1500);
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-                showAlert('Failed to update currency: ' + error.message, 'error');
-            });
-            
-            return false;
-        }
-
-        function handleDeleteCurrency(code, name) {
-            if (confirm('Are you sure you want to delete ' + name + ' (' + code + ')?\n\nThis action cannot be undone.')) {
                 var parameters = {
-                    currency: code
+                    currency: currencyCode,
+                    rate: currencyRate
                 };
                 
-                showAlert('Deleting currency...', 'success');
+                showAlert('Adding currency...', 'success');
                 
-                sendSOAPRequest('removeCurrency', parameters)
+                sendSOAPRequest('addCurrency', parameters)
                 .then(function(result) {
-                    showAlert('Currency ' + code + ' deleted successfully!', 'success');
+                    showAlert('Currency ' + currencyCode + ' added successfully!', 'success');
+                    closeModal('addCurrencyModal');
+                    event.target.reset();
                     // Refresh data after successful operation
                     setTimeout(function() {
                         refreshData();
@@ -917,24 +1507,92 @@
                 })
                 .catch(function(error) {
                     console.error('Error:', error);
-                    showAlert('Failed to delete currency: ' + error.message, 'error');
+                    showAlert('Failed to add currency: ' + error.message, 'error');
                 });
+                
+                return false;
             }
-        }
 
-        // Close modal when clicking outside
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('show');
-            }
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                document.querySelectorAll('.modal.show').forEach(function(modal) {
-                    modal.classList.remove('show');
+            function handleEditCurrency(event) {
+                event.preventDefault();
+                var formData = new FormData(event.target);
+                
+                var currencyCode = formData.get('code').toUpperCase().trim();
+                var currencyRate = formData.get('rate');
+                
+                // Validate currency code
+                if (currencyCode.length !== 3) {
+                    showAlert('Currency code must be exactly 3 characters long', 'error');
+                    return false;
+                }
+                
+                if (!/^[A-Z]{3}$/.test(currencyCode)) {
+                    showAlert('Currency code must contain only uppercase letters', 'error');
+                    return false;
+                }
+                
+                var parameters = {
+                    currency: currencyCode,
+                    rate: currencyRate
+                };
+                
+                showAlert('Updating currency...', 'success');
+                
+                sendSOAPRequest('updateExchangeRate', parameters)
+                .then(function(result) {
+                    showAlert('Currency ' + currencyCode + ' updated successfully!', 'success');
+                    closeModal('editCurrencyModal');
+                    // Refresh data after successful operation
+                    setTimeout(function() {
+                        refreshData();
+                    }, 1500);
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    showAlert('Failed to update currency: ' + error.message, 'error');
                 });
+                
+                return false;
             }
-        });
-        //</script></body></html>
+
+            function handleDeleteCurrency(code, name) {
+                if (confirm('Are you sure you want to delete ' + name + ' (' + code + ')?\n\nThis action cannot be undone.')) {
+                    var parameters = {
+                        currency: code
+                    };
+                    
+                    showAlert('Deleting currency...', 'success');
+                    
+                    sendSOAPRequest('removeCurrency', parameters)
+                    .then(function(result) {
+                        showAlert('Currency ' + code + ' deleted successfully!', 'success');
+                        // Refresh data after successful operation
+                        setTimeout(function() {
+                            refreshData();
+                        }, 1500);
+                    })
+                    .catch(function(error) {
+                        console.error('Error:', error);
+                        showAlert('Failed to delete currency: ' + error.message, 'error');
+                    });
+                }
+            }
+
+            // Close modal when clicking outside
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.classList.remove('show');
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    document.querySelectorAll('.modal.show').forEach(function(modal) {
+                        modal.classList.remove('show');
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>

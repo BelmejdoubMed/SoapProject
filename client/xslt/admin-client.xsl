@@ -511,7 +511,7 @@
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <div class="sidebar-header">
+            <!-- <div class="sidebar-header">
                 <div class="sidebar-title">
                     <i class="fas fa-coins"></i>
                     CurrencyAdmin
@@ -532,7 +532,7 @@
                     <span>Settings</span>
                 </div>
             </nav>
-        </div>
+        </div> -->
 
         <!-- Main Content -->
         <div class="main-content">
